@@ -36,19 +36,30 @@ functions:
   # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
   #     domain api call
   # - authorizer: authenticate using the AWS IAM role
-  create:
-    handler: create.main
+  createQR:
+    handler: create-qr.main
     events:
       - http:
           path: qr
           method: post
           cors: true
           # authorizer: aws_iam
-  list:
-    # Defines an HTTP API endpoint that calls the main function in list.js
-    # - path: url path is /notes
+  getQR:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /qr/{id}
     # - method: GET request
-    handler: list.main
+    handler: get-qr.main
+    events:
+      - http:
+          path: qr/{id}
+          method: get
+          cors: true
+          # authorizer: aws_iam
+  listQR:
+    # Defines an HTTP API endpoint that calls the main function in list.js
+    # - path: url path is /qr
+    # - method: GET request
+    handler: list-qr.main
     events:
       - http:
           path: qr
