@@ -1,1 +1,1 @@
-### Please visit our [Wiki Page](https://github.com/MobileApps-Cascadia/campus-directions-ios/wiki)
+### Please visit the Campus Directions [Wiki Page](https://github.com/MobileApps-Cascadia/campus-directions-ios/wiki)
