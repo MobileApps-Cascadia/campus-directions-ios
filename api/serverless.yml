@@ -85,6 +85,17 @@ functions:
           method: get
           cors: true
           # authorizer: aws_iam
+  listBuildings:
+    # Defines an HTTP API endpoint that calls the main function in list.js
+    # - path: url path is /qr
+    # - method: GET request
+    handler: list-buildings.main
+    events:
+      - http:
+          path: /buildings
+          method: get
+          cors: true
+          # authorizer: aws_iam
 
 # Create our resources with separate CloudFormation templates
 resources:
