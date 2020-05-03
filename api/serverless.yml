@@ -74,6 +74,17 @@ functions:
          method: post
          cors: true
          # authorizer: aws_iam
+  getBuilding:
+    # Defines an HTTP API endpoint that calls the main function in get.js
+    # - path: url path is /qr/{id}
+    # - method: GET request
+    handler: get-building.main
+    events:
+      - http:
+          path: /building/{id}
+          method: get
+          cors: true
+          # authorizer: aws_iam
 
 # Create our resources with separate CloudFormation templates
 resources:
