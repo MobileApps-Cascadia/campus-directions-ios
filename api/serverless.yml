@@ -92,7 +92,7 @@ functions:
     handler: list-buildings.main
     events:
       - http:
-          path: /buildings
+          path: /building
           method: get
           cors: true
           # authorizer: aws_iam
