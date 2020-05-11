@@ -8,6 +8,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import {
   SafeAreaView,
   StyleSheet,
@@ -25,11 +26,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+function HomeScreen() {
   return (
     <>
-      <NavigationContainer>
-      <StatusBar barStyle="dark-content" />
+    <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
@@ -70,8 +70,20 @@ const App: () => React$Node = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
-      </NavigationContainer>
-    </>
+      </>
+  );
+}
+
+const Stack = createStackNavigator();
+
+
+const App: () => React$Node = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
