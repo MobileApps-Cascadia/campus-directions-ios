@@ -26,10 +26,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+const Stack = createStackNavigator();
+
 function HomeScreen() {
   return (
     <>
-    <StatusBar barStyle="dark-content" />
+    <StatusBar barStyle="light-content" backgroundColor="#006299"/>
       <SafeAreaView>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
@@ -74,16 +76,27 @@ function HomeScreen() {
   );
 }
 
-const Stack = createStackNavigator();
-
-
 const App: () => React$Node = () => {
   return (
+    <>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{
+            headerStyle: {
+              backgroundColor: '#006299',
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
+    </>
   );
 };
 
