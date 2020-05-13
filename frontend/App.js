@@ -15,7 +15,7 @@ import {
   ScrollView,
   View,
   Text,
-  StatusBar,
+  StatusBar
 } from 'react-native';
 
 import {
@@ -25,7 +25,8 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./containers/HomeScreen";
+import DirectionsScreen from "./containers/DirectionsScreen";
 
 const Stack = createStackNavigator();
 
@@ -44,10 +45,8 @@ const App: () => React$Node = () => {
           },
         }}
       >
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen} 
-        />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Directions" component={DirectionsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </>

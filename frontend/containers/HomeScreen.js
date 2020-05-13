@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   View,
+  Button,
   Text,
   StatusBar,
 } from 'react-native';
@@ -16,7 +17,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-export default function HomeScreen() {
+import DirectionsScreen from "./DirectionsScreen";
+
+
+export default function HomeScreen({ route, navigation}) {
     return (
       <>
       <StatusBar barStyle="dark-content" />
@@ -37,6 +41,12 @@ export default function HomeScreen() {
                   Edit <Text style={styles.highlight}>App.js</Text> to change this
                   screen and then come back to see your edits.
                 </Text>
+              </View>
+              <View styles={styles.sectionContainer}>
+                <Button
+                  title="Go to Directions"
+                  onPress={() => navigation.navigate('Directions')}
+                />
               </View>
               <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>See Your Changes</Text>
