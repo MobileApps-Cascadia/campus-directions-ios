@@ -16,7 +16,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-function HomeScreen() {
+export default function HomeScreen() {
     return (
       <>
       <StatusBar barStyle="dark-content" />
@@ -102,5 +102,3 @@ function HomeScreen() {
       textAlign: 'right',
     },
   });
-
-  export default HomeScreen;
