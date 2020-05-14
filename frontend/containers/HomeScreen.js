@@ -23,7 +23,7 @@ import DirectionsScreen from "./DirectionsScreen";
 export default function HomeScreen({ route, navigation}) {
     return (
       <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="light-content" />
         <SafeAreaView>
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"

@@ -6,14 +6,24 @@ import {
   View,
   Button,
   Text,
+  Platform,
   StatusBar,
 } from 'react-native';
+import { exp } from 'react-native-reanimated';
 
-export default function MapScreen({routes, navigation}) {
+
+
+const styles = StyleSheet.create({
+  highlight: {
+    fontWeight: '700',
+  },
+});
+
+export default function MapScreen({routes, navigation }) {
 
     return(
         <>
-        <Text>This is the Map</Text>
+            <Text styles={styles.highlight}>The map will be here</Text>
         </>
     );
 }
