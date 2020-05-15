@@ -25,8 +25,8 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import HomeScreen from "./containers/HomeScreen";
-import DirectionsScreen from "./containers/DirectionsScreen";
+import HomeScreen from "./components/HomeScreen";
+import DirectionsScreen from "./components/DirectionsScreen";
 
 const Stack = createStackNavigator();
 

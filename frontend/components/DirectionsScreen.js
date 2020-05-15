@@ -9,13 +9,7 @@
     StatusBar,
   } from 'react-native';
 
-  import {
-    Header,
-    LearnMoreLinks,
-    Colors,
-    DebugInstructions,
-    ReloadInstructions,
-  } from 'react-native/Libraries/NewAppScreen';
+  import Colors from "./Colors";
 
   import MapScreen from "./MapScreen";
   import StepsScreen from "./StepsScreen";
@@ -26,14 +20,12 @@
   export default function DirectionsScreen({ route, navigation }) {
       return(
         <>
-          {/* <SafeAreaView> */} 
-              {/* <View style={styles.body}> */}
+          <SafeAreaView> 
+              <View style={styles.body}>
                 <View style={styles.sectionContainer}>
-                  <Text style={styles.sectionTitle}>Step One</Text>
-                  <Text style={styles.sectionDescription}>
-                    Edit <Text style={styles.highlight}>App.js</Text> to change this
-                    screen and then come back to see your edits.
-                  </Text>
+                  <Text style={styles.sectionTitle}>START POINT</Text>
+                  
+                  <Text style={styles.sectionTitle}>END POINT</Text>
                 </View>
                 <View styles={styles.sectionContainer}>
                   <Button
@@ -41,12 +33,13 @@
                     onPress={() => navigation.navigate('Home')}
                   />
                 </View>
-                <Tab.Navigator>
-                  <Tab.Screen name="Steps & More" component={StepsScreen} />
-                  <Tab.Screen name="Map" component={MapScreen} />
-              </Tab.Navigator>     
-              {/* </View> */}
-          {/* </SafeAreaView> */}
+              </View>
+          </SafeAreaView>
+          {/* Create the two tabs using React Navigation Materials Top Tabs */}
+          <Tab.Navigator>
+            <Tab.Screen name="Steps & More" component={StepsScreen} />
+            <Tab.Screen name="Map View" component={MapScreen} />
+          </Tab.Navigator>     
           </>
       );
   }
@@ -63,7 +56,7 @@
       backgroundColor: Colors.white,
     },
     sectionContainer: {
-      marginTop: 32,
+      marginTop: 75,
       paddingHorizontal: 24,
     },
     sectionTitle: {
