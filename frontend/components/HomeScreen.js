@@ -7,6 +7,8 @@ import {
   Button,
   Text,
   StatusBar,
+  ActivityIndicator,
+  FlatList,
 } from 'react-native';
 
 import {
@@ -22,23 +24,24 @@ import DirectionsScreen from "./DirectionsScreen";
 
 export default function HomeScreen({ route, navigation }) {
 
-  // const [isLoading, setLoading] = useState(true);
-  // const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
-  // useEffect(() => {
-  //   data = getBuildingsList();
+  useEffect(() => {
+    setData(getBuildingList());
+  }, []);
 
-  // }, []);
-
-  // async function getBuildingsList() {
-  //   try {
-  //     let response = await fetch('https://0reukr1831.execute-api.us-east-1.amazonaws.com/dev/buildings');
-  //     let json = await response.json();
-  //     return json.buildings;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  async function getBuildingList() {
+    try {
+      console.log("Fetching Building List...")
+      let response = await fetch('https://0reukr1831.execute-api.us-east-1.amazonaws.com/dev/buildings');
+      let json = await response.json();
+      console.log(json);
+      return json;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
@@ -59,6 +62,7 @@ export default function HomeScreen({ route, navigation }) {
               <Text style={styles.sectionDescription}>
                 Choose the Building
                 </Text>
+ 
             </View>
             <View styles={styles.sectionContainer}>
             </View>
