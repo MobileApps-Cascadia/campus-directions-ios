@@ -75,9 +75,13 @@ export default function HomeScreen({ route, navigation }) {
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step Three</Text>
               <Button
-                title="Get Directions!"
+                title="Scan QR"
                 onPress={() => navigation.navigate('Directions')}
               />
+              <Button
+                title="Use Location"
+                onPress={() => navigation.navigate('Directions', { screen: 'Map View'})}
+              />              
             </View>
           </View>
         </ScrollView>

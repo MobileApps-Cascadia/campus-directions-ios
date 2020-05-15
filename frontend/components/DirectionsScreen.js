@@ -28,10 +28,6 @@
                   <Text style={styles.sectionTitle}>END POINT</Text>
                 </View>
                 <View styles={styles.sectionContainer}>
-                  <Button
-                    title="Go to Home"
-                    onPress={() => navigation.navigate('Home')}
-                  />
                 </View>
               </View>
           </SafeAreaView>
