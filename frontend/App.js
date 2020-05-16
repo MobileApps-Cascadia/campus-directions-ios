@@ -31,6 +31,7 @@ import DirectionsScreen from "./components/DirectionsScreen";
 const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
+  
   return (
     <>
     <NavigationContainer>

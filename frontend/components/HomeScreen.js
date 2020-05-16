@@ -7,9 +7,11 @@ import {
   Button,
   Text,
   StatusBar,
+  ListItem,
   ActivityIndicator,
-  FlatList,
 } from 'react-native';
+
+// import { ListItem } from 'react-native-elements'
 
 import {
   Header,
@@ -18,25 +20,32 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+// import { Dropdown } from 'react-native-material-dropdown';
 
-import DirectionsScreen from "./DirectionsScreen";
-
+const width_proportion = '90%';
+const width_proportion_listbox_header = '100%';
 
 export default function HomeScreen({ route, navigation }) {
 
+
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [buildings, setBuildings] = useState([]);
+  const [rooms, setRooms] = useState([]);
+  const [selectedBuilding, setSelectedBuilding] = useState('');
+  const [selectedRoom, setSelectedRoom] = useState('');
 
   useEffect(() => {
-    setData(getBuildingList());
+    getBuildingList();
   }, []);
 
   async function getBuildingList() {
     try {
-      console.log("Fetching Building List...")
-      let response = await fetch('https://0reukr1831.execute-api.us-east-1.amazonaws.com/dev/buildings');
+      let response = await fetch(
+        'https://0reukr1831.execute-api.us-east-1.amazonaws.com/dev/buildings', {
+        method: 'GET'
+      });
       let json = await response.json();
-      console.log(json);
+      setBuildings(json);
       return json;
     } catch (error) {
       console.error(error);
@@ -47,9 +56,7 @@ export default function HomeScreen({ route, navigation }) {
     <>
       <StatusBar barStyle="light-content" />
       <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
+        <ScrollView>
           <Header />
           {global.HermesInternal == null ? null : (
             <View style={styles.engine}>
@@ -58,20 +65,62 @@ export default function HomeScreen({ route, navigation }) {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Choose the Building
-                </Text>
- 
+              <Text style={styles.sectionTitle}>Step One: Pick Building</Text>
             </View>
+
+            <View style={styles.listBox}>
+              <View style={styles.listBoxHeader}>
+              <Text style={styles.listBoxHeaderText}>
+                {
+                  (selectedBuilding == '' ? '-' : selectedBuilding)
+                }
+              </Text>
+              </View>
+              {
+                buildings.map((building, index) => (
+                  <Text
+                    key={index}
+                    // title={list.buildingName}
+                    style={styles.listBoxItem}
+                    onPress={() => {
+                      setSelectedBuilding(building.buildingId);
+                      setRooms(buildings[index].rooms);
+                    }}>
+                    {building.buildingName}
+                  </Text>
+                ))
+              }
+            </View>
+
+
             <View styles={styles.sectionContainer}>
             </View>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step Two</Text>
-              <Text style={styles.sectionDescription}>
-                Choose the Room (optional)
-                </Text>
+              <Text style={styles.sectionTitle}>Step Two: Pick Room (optional)</Text>
             </View>
+            <View style={styles.listBox}>
+              <View style={styles.listBoxHeader}>
+              <Text style={styles.listBoxHeaderText}>
+                {
+                  (selectedRoom == '' ? '-' : selectedRoom)
+                }
+              </Text>
+              </View>
+              {
+                rooms.map((room, id) => (
+                  <Text
+                    key={id}
+                    // title={list.buildingName}
+                    style={styles.listBoxItem}
+                    onPress={() => {
+                      setSelectedRoom(room.roomId);
+                    }}>
+                    {room.roomName}
+                  </Text>
+                ))
+              }
+            </View>
+
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step Three</Text>
               <Button
@@ -80,8 +129,8 @@ export default function HomeScreen({ route, navigation }) {
               />
               <Button
                 title="Use Location"
-                onPress={() => navigation.navigate('Directions', { screen: 'Map View'})}
-              />              
+                onPress={() => navigation.navigate('Directions', { screen: 'Map View' })}
+              />
             </View>
           </View>
         </ScrollView>
@@ -92,22 +141,68 @@ export default function HomeScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: Colors.lighter,
+    backgroundColor: Colors.white,
   },
   engine: {
     position: 'absolute',
     right: 0,
+    backgroundColor: Colors.white,
   },
   body: {
     backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
   },
+  listBox: {
+    width: width_proportion,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    borderWidth: 1,
+    borderColor: '#EEE',
+    backgroundColor: '#EEE',
+    color: '#fff',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  listBoxHeaderText: {
+    width: width_proportion_listbox_header,
+    fontSize: 18,
+    marginHorizontal: 8,
+    marginVertical: 6,
+    fontWeight: '400',
+    color: '#007AFF',
+  },
+  listBoxHeader: {
+    width: width_proportion_listbox_header,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderWidth: 1,
+    borderColor: '#DDD',
+    backgroundColor: '#DDD',
+  },
+  listBoxItem: {
+    width: width_proportion_listbox_header,
+    marginHorizontal: 8,
+    marginVertical: 6,
+    color: '#000',
+    textAlign: 'left',
+    fontSize: 18, 
+  },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
+    marginVertical: 8,
     color: Colors.black,
   },
   sectionDescription: {
