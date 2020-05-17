@@ -23,7 +23,7 @@ import {
 // import { Dropdown } from 'react-native-material-dropdown';
 
 const width_proportion = '90%';
-const width_proportion_listbox_header = '101.5%';
+const width_proportion_listbox_header = '101%';
 
 export default function HomeScreen({ route, navigation }) {
 
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     width: width_proportion_listbox_header,
     fontSize: 18,
     marginHorizontal: 8,
-    marginVertical: 8,
+    marginVertical: 10,
     fontWeight: '500',
     color: '#007AFF',
   },
@@ -221,7 +221,9 @@ const styles = StyleSheet.create({
     width: width_proportion_listbox_header,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
-    marginLeft: -2.5,
+    marginLeft: -1,
+    marginBottom: -1,
+    marginTop: -1,
     borderWidth: 1,
     borderColor: '#DDD',
     backgroundColor: '#DDD',
@@ -229,7 +231,7 @@ const styles = StyleSheet.create({
   listBoxItem: {
     width: width_proportion_listbox_header,
     marginHorizontal: 8,
-    marginVertical: 8,
+    marginVertical: 10,
     color: '#000',
     textAlign: 'left',
     fontSize: 18, 
