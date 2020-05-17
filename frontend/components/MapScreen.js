@@ -15,7 +15,6 @@ export default function MapScreen({ routes, navigation }) {
 
   return (
     <>
-      <SafeAreaView>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
@@ -24,7 +23,6 @@ export default function MapScreen({ routes, navigation }) {
             <Text>This is the Map</Text>
           </View>
         </ScrollView>
-      </SafeAreaView>
     </>
   );
 }

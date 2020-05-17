@@ -53,24 +53,25 @@ export default function HomeScreen({ route, navigation }) {
   return (
     <>
       <StatusBar barStyle="light-content" />
-      <SafeAreaView>
-        <ScrollView >
+      {/* <SafeAreaView> */}
+        <ScrollView contentInsetAdjustmentBehavior="automatic"
+          style={styles.scrollView}>
           <Header />
-          {global.HermesInternal == null ? null : (
+          {/* {global.HermesInternal == null ? null : (
             <View style={styles.engine}>
               <Text style={styles.footer}>Engine: Hermes</Text>
             </View>
-          )}
+          )} */}
           <View style={styles.body}>
 
             {/* Step 1 - Choose the Building */}
             <View style={styles.horizontalStackLeftAlign}>
-              <View style={styles.numberCircle}><Text style={styles.numberCircleText}>1</Text></View>
-              <Text style={styles.sectionTitle}>  Select the Building</Text>
+              <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>1</Text></View>
+              <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select the Building</Text>
             </View>
 
             <View style={styles.centerContent}>
-              <View style={styles.listBoxBuilding}>
+              <View style={[styles.listBoxBuilding, styles.dropShadow]}>
                 <View style={styles.listBoxHeader}>
                   <Text style={styles.listBoxHeaderText}>
                     {
@@ -98,13 +99,15 @@ export default function HomeScreen({ route, navigation }) {
               </View>
             </View>
 
+            <View style={styles.horizontalStack}></View>
+
             {/* Step 2 - Choose the Room number */}
             <View style={styles.horizontalStackLeftAlign}>
-            <View style={styles.numberCircle}><Text style={styles.numberCircleText}>2</Text></View>
-              <Text style={styles.sectionTitle}>  Select a room number (optional)</Text>
+              <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>2</Text></View>
+              <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select a room number (optional)</Text>
             </View>
             <View style={styles.centerContent}>
-              <View style={styles.listBoxRoom}>
+              <View style={[styles.listBoxRoom, styles.dropShadow]}>
                 <View style={styles.listBoxHeader}>
                   <Text style={styles.listBoxHeaderText}>
                     {
@@ -129,28 +132,28 @@ export default function HomeScreen({ route, navigation }) {
                 }
               </View>
             </View>
-
+            <View style={styles.horizontalStack}></View>
             {/* Step 3 - Choose the location gathering method */}
-              <View style={styles.horizontalStack}>
-              <View style={styles.numberCircle}><Text style={styles.numberCircleText}>3</Text></View>
-                <Button
-                  title="Scan QR"
-                  onPress={() => navigation.navigate('Directions')}
-                />
-                <Text> OR </Text>
-                <Button
-                  title="Use Location"
-                  onPress={() => navigation.navigate('Directions', { screen: 'Map View' })}
-                />
-              </View>
+            <View style={[styles.horizontalStack, styles.centerContent]}>
+              <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
+              <Button
+                title="Scan QR"
+                onPress={() => navigation.navigate('Directions')}
+              />
+              <Text> OR </Text>
+              <Button
+                title="Use Location"
+                onPress={() => navigation.navigate('Directions', { screen: 'Map View' })}
+              />
+            </View>
 
-              {/* Footer */}
-              <View style={styles.horizontalStack}>
-                <Text style={styles.sectionDescription}>About | FAQ | Contact</Text>
-              </View>
+            {/* Footer */}
+            <View style={[styles.horizontalStack, styles.centerContent]}>
+              <Text style={styles.sectionDescription}>About | FAQ | Contact</Text>
+            </View>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      {/* </SafeAreaView> */}
     </>
   );
 }
@@ -166,26 +169,37 @@ const styles = StyleSheet.create({
     color: '#007AFF',
 
   },
+  dropShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4.00,
+
+    elevation: 1,
+  },
   numberCircleText: {
     backgroundColor: '#FF7C1C', 
     marginTop: -6, 
     fontSize: 24, 
     color: '#fff', 
     fontWeight: '800', 
-    textAlign: 'center', 
+    textAlign: 'center',
     textAlignVertical: 'top',
   },
   numberCircle: {
-      borderRadius: 25,
-      width: 36,
-      height: 36,
-      padding: 8,
+    borderRadius: 25,
+    width: 36,
+    height: 36,
+    padding: 8,
 
-      backgroundColor: '#FF7C1C',
-      borderWidth: 2,
-      borderColor: '#FF7C1C',
-      textAlign: 'center',
-      fontSize: 32,
+    backgroundColor: '#FF7C1C',
+    borderWidth: 2,
+    borderColor: '#FF7C1C',
+    textAlign: 'center',
+    fontSize: 32,
   },
   scrollView: {
     backgroundColor: Colors.white,
@@ -210,8 +224,6 @@ const styles = StyleSheet.create({
   horizontalStack: {
     marginTop: 32,
     flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'center',
   },
   horizontalStackLeftAlign: {
     flexDirection: 'row', 
@@ -223,44 +235,31 @@ const styles = StyleSheet.create({
     height: 200,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
     borderWidth: 1,
     borderColor: '#EEE',
     backgroundColor: '#EEE',
     color: '#fff',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
 
-    elevation: 5,
   },
   listBoxRoom: {
     width: width_proportion,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
     borderWidth: 1,
     borderColor: '#EEE',
     backgroundColor: '#EEE',
     color: '#fff',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4.00,
-
-    elevation: 1,
   },
   listBoxHeaderText: {
     width: width_proportion_listbox_header,
     fontSize: 18,
     marginHorizontal: 8,
     marginVertical: 10,
-    fontWeight: '500',
+    fontWeight: '400',
     color: '#007AFF',
   },
   listBoxHeader: {
