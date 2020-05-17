@@ -11,8 +11,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-// import { ListItem } from 'react-native-elements'
-
 import {
   Header,
   LearnMoreLinks,
@@ -20,13 +18,13 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-// import { Dropdown } from 'react-native-material-dropdown';
+
+import config from '../config';
 
 const width_proportion = '90%';
 const width_proportion_listbox_header = '101%';
 
 export default function HomeScreen({ route, navigation }) {
-
 
   const [isLoading, setLoading] = useState(true);
   const [buildings, setBuildings] = useState([]);
@@ -36,16 +34,16 @@ export default function HomeScreen({ route, navigation }) {
 
   useEffect(() => {
     getBuildingList();
-  }, []);
+  }, [buildings]);
 
   async function getBuildingList() {
     try {
       let response = await fetch(
-        'https://0reukr1831.execute-api.us-east-1.amazonaws.com/dev/buildings', {
+        config.apiGateway.GET_BUILDINGS_LIST, {
         method: 'GET'
       });
       let json = await response.json();
-      setBuildings(json.sort((a,b) => (a.buildingName > b.buildingName) ? 1 : -1));
+      setBuildings(json.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1));
       return json;
     } catch (error) {
       console.error(error);
@@ -56,7 +54,7 @@ export default function HomeScreen({ route, navigation }) {
     <>
       <StatusBar barStyle="light-content" />
       <SafeAreaView>
-        <ScrollView>
+        <ScrollView >
           <Header />
           {global.HermesInternal == null ? null : (
             <View style={styles.engine}>
@@ -64,79 +62,92 @@ export default function HomeScreen({ route, navigation }) {
             </View>
           )}
           <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One: Pick Building</Text>
+
+            {/* Step 1 - Choose the Building */}
+            <View style={styles.horizontalStackLeftAlign}>
+              <View style={styles.numberCircle}><Text style={styles.numberCircleText}>1</Text></View>
+              <Text style={styles.sectionTitle}>  Select the Building</Text>
             </View>
 
-            <View style={styles.listBoxBuilding}>
-              <View style={styles.listBoxHeader}>
-              <Text style={styles.listBoxHeaderText}>
-                {
-                  (selectedBuilding == '' ? '-' : selectedBuilding)
-                }
-              </Text>
-              </View>
-              <ScrollView>
-              {
-                buildings.map((building, index) => (
-                  <Text
-                    key={index}
-                    // title={list.buildingName}
-                    style={styles.listBoxItem}
-                    onPress={() => {
-                      setSelectedBuilding(building.buildingId);
-                      setRooms(buildings[index].rooms);
-                    }}>
-                    {building.buildingName}
-                    <Text style={(selectedBuilding == building.buildingId ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
+            <View style={styles.centerContent}>
+              <View style={styles.listBoxBuilding}>
+                <View style={styles.listBoxHeader}>
+                  <Text style={styles.listBoxHeaderText}>
+                    {
+                      (selectedBuilding == '' ? '-' : selectedBuilding)
+                    }
                   </Text>
-                ))
-              }
-              </ScrollView>
-            </View>
-
-
-            <View styles={styles.sectionContainer}>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step Two: Pick Room (optional)</Text>
-            </View>
-            <View style={styles.listBoxRoom}>
-              <View style={styles.listBoxHeader}>
-              <Text style={styles.listBoxHeaderText}>
-                {
-                  (selectedRoom == '' ? '-' : selectedRoom)
-                }
-              </Text>
+                </View>
+                <ScrollView>
+                  {
+                    buildings.map((building, index) => (
+                      <Text
+                        key={index}
+                        // title={list.buildingName}
+                        style={styles.listBoxItem}
+                        onPress={() => {
+                          setSelectedBuilding(building.buildingName);
+                          setRooms(buildings[index].rooms);
+                        }}>
+                        {building.buildingName}
+                        <Text style={(selectedBuilding == building.buildingName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
+                      </Text>
+                    ))
+                  }
+                </ScrollView>
               </View>
-              {
-                rooms.map((room, index) => (
-                  <Text
-                    key={index}
-                    // title={list.buildingName}
-                    style={styles.listBoxItem}
-                    onPress={() => {
-                      setSelectedRoom(room.roomId);
-                    }}>
-                    
-                    {room.roomName}
-                    <Text style={(selectedRoom == room.roomId ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
-                  </Text>
-                ))
-              }
             </View>
 
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step Three</Text>
-              <Button
-                title="Scan QR"
-                onPress={() => navigation.navigate('Directions')}
-              />
-              <Button
-                title="Use Location"
-                onPress={() => navigation.navigate('Directions', { screen: 'Map View' })}
-              />
+            {/* Step 2 - Choose the Room number */}
+            <View style={styles.horizontalStackLeftAlign}>
+            <View style={styles.numberCircle}><Text style={styles.numberCircleText}>2</Text></View>
+              <Text style={styles.sectionTitle}>  Select a room number (optional)</Text>
             </View>
+            <View style={styles.centerContent}>
+              <View style={styles.listBoxRoom}>
+                <View style={styles.listBoxHeader}>
+                  <Text style={styles.listBoxHeaderText}>
+                    {
+                      (selectedRoom == '' ? '-' : selectedRoom)
+                    }
+                  </Text>
+                </View>
+                {
+                  rooms.map((room, index) => (
+                    <Text
+                      key={index}
+                      // title={list.buildingName}
+                      style={styles.listBoxItem}
+                      onPress={() => {
+                        setSelectedRoom(room.roomName);
+                      }}>
+
+                      {room.roomName}
+                      <Text style={(selectedRoom == room.roomName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
+                    </Text>
+                  ))
+                }
+              </View>
+            </View>
+
+            {/* Step 3 - Choose the location gathering method */}
+              <View style={styles.horizontalStack}>
+              <View style={styles.numberCircle}><Text style={styles.numberCircleText}>3</Text></View>
+                <Button
+                  title="Scan QR"
+                  onPress={() => navigation.navigate('Directions')}
+                />
+                <Text> OR </Text>
+                <Button
+                  title="Use Location"
+                  onPress={() => navigation.navigate('Directions', { screen: 'Map View' })}
+                />
+              </View>
+
+              {/* Footer */}
+              <View style={styles.horizontalStack}>
+                <Text style={styles.sectionDescription}>About | FAQ | Contact</Text>
+              </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -148,12 +159,33 @@ const styles = StyleSheet.create({
   checkMarkHide: {
     opacity: 0.00,
     color: '#007AFF',
-    
+
   },
   checkMarkShow: {
     opacity: 1.00,
     color: '#007AFF',
-    
+
+  },
+  numberCircleText: {
+    backgroundColor: '#FF7C1C', 
+    marginTop: -6, 
+    fontSize: 24, 
+    color: '#fff', 
+    fontWeight: '800', 
+    textAlign: 'center', 
+    textAlignVertical: 'top',
+  },
+  numberCircle: {
+      borderRadius: 25,
+      width: 36,
+      height: 36,
+      padding: 8,
+
+      backgroundColor: '#FF7C1C',
+      borderWidth: 2,
+      borderColor: '#FF7C1C',
+      textAlign: 'center',
+      fontSize: 32,
   },
   scrollView: {
     backgroundColor: Colors.white,
@@ -165,16 +197,30 @@ const styles = StyleSheet.create({
   },
   body: {
     backgroundColor: Colors.white,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
   },
+  centerContent: {
+    marginTop: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  horizontalStack: {
+    marginTop: 32,
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+  },
+  horizontalStackLeftAlign: {
+    flexDirection: 'row', 
+    paddingHorizontal: 24,
+    marginTop: 32,
+  },
   listBoxBuilding: {
     width: width_proportion,
-    height: 175,
+    height: 200,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
     borderWidth: 1,
@@ -234,10 +280,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: '#000',
     textAlign: 'left',
-    fontSize: 18, 
+    fontSize: 18,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: '600',
     marginVertical: 8,
     color: Colors.black,

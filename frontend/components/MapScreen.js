@@ -11,8 +11,6 @@ import {
 } from 'react-native';
 import Colors from "./Colors";
 
-
-
 export default function MapScreen({ routes, navigation }) {
 
   return (

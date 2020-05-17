@@ -46,6 +46,7 @@ const App: () => React$Node = () => {
           },
         }}
       >
+        {/* Setup the Stack Navigation */}
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Directions" component={DirectionsScreen} />
       </Stack.Navigator>
