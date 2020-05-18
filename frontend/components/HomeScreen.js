@@ -9,6 +9,7 @@ import {
   StatusBar,
   ListItem,
   ActivityIndicator,
+  Alert
 } from 'react-native';
 
 import {
@@ -20,6 +21,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import config from '../config';
+import Geolocation from 'react-native-geolocation-service';
 
 const width_proportion = '90%';
 const width_proportion_listbox_header = '101%';
@@ -29,8 +31,10 @@ export default function HomeScreen({ route, navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [buildings, setBuildings] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [selectedBuilding, setSelectedBuilding] = useState('');
-  const [selectedRoom, setSelectedRoom] = useState('');
+  const [selectedBuilding, setSelectedBuilding] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
+
+  const [location, setLocation] = useState([]);
 
   useEffect(() => {
     getBuildingList();
@@ -44,115 +48,189 @@ export default function HomeScreen({ route, navigation }) {
       });
       let json = await response.json();
       setBuildings(json.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1));
+      setLoading(false);
       return json;
     } catch (error) {
       console.error(error);
     }
-  }
+  };
+
+  const createAlert = (message) => {
+    Alert.alert(
+      "Error",
+      message,
+      [
+        {
+          text: "Close",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  hasLocationPermission = async () => {
+    if (Platform.OS === 'ios' ||
+        (Platform.OS === 'android' && Platform.Version < 23)) {
+      return true;
+    }
+
+    const hasPermission = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+
+    if (hasPermission) return true;
+
+    const status = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+
+    if (status === PermissionsAndroid.RESULTS.GRANTED) return true;
+
+    if (status === PermissionsAndroid.RESULTS.DENIED) {
+      ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
+    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+      ToastAndroid.show('Location permission revoked by user.', ToastAndroid.LONG);
+    }
+
+    return false;
+  };
+
+  getLocation = async () => {
+    const hasLocationPermission = await this.hasLocationPermission();
+
+    if (!hasLocationPermission) return;
+
+    setLoading(true);
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        setLocation(position);
+        setLoading(false);
+        console.log(position);
+      },
+      (error) => {
+        setLocation(error);
+        setLoading(false);
+        console.log(error);
+        createAlert(error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000, distanceFilter: 50, forceRequestLocation: true }
+    );
+  };
 
   return (
     <>
       <StatusBar barStyle="light-content" />
       {/* <SafeAreaView> */}
-        <ScrollView contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {/* {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )} */}
-          <View style={styles.body}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic"
+        style={styles.scrollView}>
+        <Header />
+        {global.HermesInternal == null ? null : (
+          <View style={styles.engine}>
+            <Text style={styles.footer}>Engine: Hermes</Text>
+          </View>
+        )}
+        
+        <View style={styles.body}>
+          {/* Step 1 - Choose the Building */}
+          <View style={styles.horizontalStackLeftAlign}>
+            <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>1</Text></View>
+            <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select a building</Text>
+          </View>
 
-            {/* Step 1 - Choose the Building */}
-            <View style={styles.horizontalStackLeftAlign}>
-              <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>1</Text></View>
-              <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select the Building</Text>
-            </View>
-
-            <View style={styles.centerContent}>
-              <View style={[styles.listBoxBuilding, styles.dropShadow]}>
-                <View style={styles.listBoxHeader}>
-                  <Text style={styles.listBoxHeaderText}>
-                    {
-                      (selectedBuilding == '' ? '-' : selectedBuilding)
-                    }
-                  </Text>
-                </View>
-                <ScrollView>
+          <View style={styles.centerContent}>
+            <View style={[styles.listBoxFixed, styles.dropShadow]}>
+              <View style={styles.listBoxHeader}>
+                <Text style={styles.listBoxHeaderText}>
                   {
-                    buildings.map((building, index) => (
-                      <Text
-                        key={index}
-                        // title={list.buildingName}
-                        style={styles.listBoxItem}
-                        onPress={() => {
-                          setSelectedBuilding(building.buildingName);
-                          setRooms(buildings[index].rooms);
-                        }}>
-                        {building.buildingName}
-                        <Text style={(selectedBuilding == building.buildingName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
-                      </Text>
-                    ))
+                    (selectedBuilding == '' ? '-' : selectedBuilding.buildingName)
                   }
-                </ScrollView>
+                </Text>
               </View>
-            </View>
 
-            <View style={styles.horizontalStack}></View>
-
-            {/* Step 2 - Choose the Room number */}
-            <View style={styles.horizontalStackLeftAlign}>
-              <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>2</Text></View>
-              <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select a room number (optional)</Text>
-            </View>
-            <View style={styles.centerContent}>
-              <View style={[styles.listBoxRoom, styles.dropShadow]}>
-                <View style={styles.listBoxHeader}>
-                  <Text style={styles.listBoxHeaderText}>
-                    {
-                      (selectedRoom == '' ? '-' : selectedRoom)
-                    }
-                  </Text>
-                </View>
+              <ScrollView>
                 {
-                  rooms.map((room, index) => (
+                  buildings.map((building, index) => (
                     <Text
                       key={index}
                       // title={list.buildingName}
                       style={styles.listBoxItem}
                       onPress={() => {
-                        setSelectedRoom(room.roomName);
+                        setSelectedBuilding(building);
+                        setRooms(buildings[index].rooms);
                       }}>
-
-                      {room.roomName}
-                      <Text style={(selectedRoom == room.roomName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
+                      {building.buildingName}
+                      <Text style={(selectedBuilding.buildingName == building.buildingName ? 
+                        styles.checkMarkShow : 
+                        styles.checkMarkHide)}
+                      >  &#10003;</Text>
                     </Text>
                   ))
                 }
-              </View>
-            </View>
-            <View style={styles.horizontalStack}></View>
-            {/* Step 3 - Choose the location gathering method */}
-            <View style={[styles.horizontalStack, styles.centerContent]}>
-              <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
-              <Button
-                title="Scan QR"
-                onPress={() => navigation.navigate('Directions')}
-              />
-              <Text> OR </Text>
-              <Button
-                title="Use Location"
-                onPress={() => navigation.navigate('Directions', { screen: 'Map View' })}
-              />
-            </View>
-
-            {/* Footer */}
-            <View style={[styles.horizontalStack, styles.centerContent]}>
-              <Text style={styles.sectionDescription}>About | FAQ | Contact</Text>
+              </ScrollView>
             </View>
           </View>
-        </ScrollView>
+
+          <View style={styles.horizontalStack}></View>
+
+          {/* Step 2 - Choose the Room number */}
+          <View style={styles.horizontalStackLeftAlign}>
+            <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>2</Text></View>
+            <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select a room (optional)</Text>
+          </View>
+          <View style={styles.centerContent}>
+            <View style={[styles.listBoxFlexible, styles.dropShadow]}>
+              <View style={styles.listBoxHeader}>
+                <Text style={styles.listBoxHeaderText}>
+                  {
+                    (selectedRoom == '' ? '-' : selectedRoom.roomName)
+                  }
+                </Text>
+              </View>
+              {
+                rooms.map((room, index) => (
+                  <Text
+                    key={index}
+                    // title={list.buildingName}
+                    style={styles.listBoxItem}
+                    onPress={() => {
+                      setSelectedRoom(room);
+                    }}>
+
+                    {room.roomName}
+                    <Text style={(selectedRoom.roomName == room.roomName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
+                  </Text>
+                ))
+              }
+            </View>
+          </View>
+          
+          <View style={styles.horizontalStack}></View>
+          
+          {/* Step 3 - Choose the location gathering method */}
+          <View style={[styles.horizontalStack, styles.centerContent]}>
+            <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
+            <Button
+              title="Scan QR"
+              onPress={() => (selectedBuilding == '' ? createAlert() : navigation.navigate('Directions'))}
+            />
+            <Text> OR </Text>
+            <Button
+              title="Use Location"
+              onPress={() => (selectedBuilding == '' ? createAlert("Please choose a building.") : getLocation())}
+            />
+          </View>
+
+          <View style={styles.horizontalStack}></View>
+
+          {/* Footer */}
+          <View style={[styles.horizontalStack, styles.centerContent]}>
+            <Text style={styles.sectionDescription}>About | FAQ | Contact</Text>
+          </View>
+        </View>
+      </ScrollView>
       {/* </SafeAreaView> */}
     </>
   );
@@ -181,11 +259,12 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   numberCircleText: {
-    backgroundColor: '#FF7C1C', 
-    marginTop: -6, 
-    fontSize: 24, 
-    color: '#fff', 
-    fontWeight: '800', 
+    backgroundColor: '#FF7C1C',
+    marginTop: -6,
+    marginBottom: -1,
+    fontSize: 24,
+    color: '#fff',
+    fontWeight: '800',
     textAlign: 'center',
     textAlignVertical: 'top',
   },
@@ -223,14 +302,14 @@ const styles = StyleSheet.create({
   },
   horizontalStack: {
     marginTop: 32,
-    flexDirection: 'row', 
+    flexDirection: 'row',
   },
   horizontalStackLeftAlign: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     paddingHorizontal: 24,
     marginTop: 32,
   },
-  listBoxBuilding: {
+  listBoxFixed: {
     width: width_proportion,
     height: 200,
     borderBottomLeftRadius: 5,
@@ -243,7 +322,7 @@ const styles = StyleSheet.create({
     color: '#fff',
 
   },
-  listBoxRoom: {
+  listBoxFlexible: {
     width: width_proportion,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,

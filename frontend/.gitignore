@@ -61,3 +61,10 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+## User settings
+/ios/xcuserdata/
+
+## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+/ios/*.xcscmblueprint
+/ios/*.xccheckout
