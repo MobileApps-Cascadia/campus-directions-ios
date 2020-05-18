@@ -1,10 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,6 +25,7 @@ import DirectionsScreen from "./components/DirectionsScreen";
 const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
+  
   return (
     <>
     <NavigationContainer>
@@ -45,6 +40,7 @@ const App: () => React$Node = () => {
           },
         }}
       >
+        {/* Setup the Stack Navigation */}
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Directions" component={DirectionsScreen} />
       </Stack.Navigator>
@@ -55,7 +51,7 @@ const App: () => React$Node = () => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: Colors.lighter,
+    backgroundColor: Colors.white,
   },
   engine: {
     position: 'absolute',

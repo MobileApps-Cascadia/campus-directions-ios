@@ -15,7 +15,6 @@ export default function StepsScreen({ routes, navigation }) {
 
   return (
     <>
-      <SafeAreaView>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
@@ -24,7 +23,6 @@ export default function StepsScreen({ routes, navigation }) {
             <Text>This is the Steps</Text>
           </View>
         </ScrollView>
-      </SafeAreaView>
     </>
   );
 }
