@@ -21,7 +21,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import config from '../config';
-import { getRoute } from '../libs/directionsAPILib';
+import { getDirections } from '../libs/directionsAPILib';
 import Geolocation from 'react-native-geolocation-service';
 
 const width_proportion = '90%';
@@ -220,7 +220,7 @@ export default function HomeScreen({ route, navigation }) {
             <Text> OR </Text>
             <Button
               title="Use Location"
-              onPress={() => (selectedBuilding == '' ? createAlert("Please choose a building.") : getRoute([-122.192706,47.759052],[-122.191854,47.761149]))}
+              onPress={() => (selectedBuilding == '' ? createAlert("Please choose a building.") : getDirections([-122.192706,47.759052],[-122.191854,47.761149]))}
             />
           </View>
 
