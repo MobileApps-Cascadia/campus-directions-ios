@@ -45,6 +45,10 @@ def flipper_post_install(installer)
 end
 
 target 'frontend' do
+
+  # Mapbox
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
+
   # Pods for frontend
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
