@@ -20,9 +20,11 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import '../styles/index';
 import config from '../config';
 import { getDirections } from '../libs/directionsAPILib';
 import Geolocation from 'react-native-geolocation-service';
+import uStyles from '../styles/index';
 
 const width_proportion = '90%';
 const width_proportion_listbox_header = '101%';
@@ -137,12 +139,12 @@ export default function HomeScreen({ route, navigation }) {
         <View style={styles.body}>
           {/* Step 1 - Choose the Building */}
           <View style={styles.horizontalStackLeftAlign}>
-            <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>1</Text></View>
-            <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select a building</Text>
+            <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>1</Text></View>
+            <Text style={[styles.sectionTitle, uStyles.dropShadow]}>  Select a building</Text>
           </View>
 
           <View style={styles.centerContent}>
-            <View style={[styles.listBoxFixed, styles.dropShadow]}>
+            <View style={[styles.listBoxFixed, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
                   {
@@ -178,11 +180,11 @@ export default function HomeScreen({ route, navigation }) {
 
           {/* Step 2 - Choose the Room number */}
           <View style={styles.horizontalStackLeftAlign}>
-            <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>2</Text></View>
-            <Text style={[styles.sectionTitle, styles.dropShadow]}>  Select a room (optional)</Text>
+            <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>2</Text></View>
+            <Text style={[styles.sectionTitle, uStyles.dropShadow]}>  Select a room (optional)</Text>
           </View>
           <View style={styles.centerContent}>
-            <View style={[styles.listBoxFlexible, styles.dropShadow]}>
+            <View style={[styles.listBoxFlexible, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
                   {
@@ -212,7 +214,7 @@ export default function HomeScreen({ route, navigation }) {
           
           {/* Step 3 - Choose the location gathering method */}
           <View style={[styles.horizontalStack, styles.centerContent]}>
-            <View style={[styles.numberCircle, styles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
+            <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
             <Button
               title="Scan QR"
               onPress={() => (selectedBuilding == '' ? createAlert() : navigation.navigate('Directions'))}
