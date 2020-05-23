@@ -20,7 +20,6 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import '../styles/index';
 import config from '../config';
 import { getDirections } from '../libs/directionsAPILib';
 import Geolocation from 'react-native-geolocation-service';
@@ -138,12 +137,12 @@ export default function HomeScreen({ route, navigation }) {
         
         <View style={styles.body}>
           {/* Step 1 - Choose the Building */}
-          <View style={styles.horizontalStackLeftAlign}>
+          <View style={uStyles.horizontalStackLeftAlign}>
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>1</Text></View>
             <Text style={[styles.sectionTitle, uStyles.dropShadow]}>  Select a building</Text>
           </View>
 
-          <View style={styles.centerContent}>
+          <View style={uStyles.centerContent}>
             <View style={[styles.listBoxFixed, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
@@ -176,14 +175,14 @@ export default function HomeScreen({ route, navigation }) {
             </View>
           </View>
 
-          <View style={styles.horizontalStack}></View>
+          <View style={uStyles.horizontalStack}></View>
 
           {/* Step 2 - Choose the Room number */}
-          <View style={styles.horizontalStackLeftAlign}>
+          <View style={uStyles.horizontalStackLeftAlign}>
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>2</Text></View>
             <Text style={[styles.sectionTitle, uStyles.dropShadow]}>  Select a room (optional)</Text>
           </View>
-          <View style={styles.centerContent}>
+          <View style={uStyles.centerContent}>
             <View style={[styles.listBoxFlexible, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
@@ -210,10 +209,10 @@ export default function HomeScreen({ route, navigation }) {
             </View>
           </View>
           
-          <View style={styles.horizontalStack}></View>
+          <View style={uStyles.horizontalStack}></View>
           
           {/* Step 3 - Choose the location gathering method */}
-          <View style={[styles.horizontalStack, styles.centerContent]}>
+          <View style={[uStyles.horizontalStack, uStyles.centerContent]}>
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
             <Button
               title="Scan QR"
@@ -226,10 +225,10 @@ export default function HomeScreen({ route, navigation }) {
             />
           </View>
 
-          <View style={styles.horizontalStack}></View>
+          <View style={uStyles.horizontalStack}></View>
 
           {/* Footer */}
-          <View style={[styles.horizontalStack, styles.centerContent]}>
+          <View style={[uStyles.horizontalStack, uStyles.centerContent]}>
             <Text style={styles.sectionDescription}>About | FAQ | Contact</Text>
           </View>
         </View>
@@ -249,17 +248,6 @@ const styles = StyleSheet.create({
     opacity: 1.00,
     color: '#007AFF',
 
-  },
-  dropShadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4.00,
-
-    elevation: 1,
   },
   numberCircleText: {
     backgroundColor: '#FF7C1C',
@@ -297,20 +285,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
-  },
-  centerContent: {
-    marginTop: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  horizontalStack: {
-    marginTop: 32,
-    flexDirection: 'row',
-  },
-  horizontalStackLeftAlign: {
-    flexDirection: 'row',
-    paddingHorizontal: 24,
-    marginTop: 32,
   },
   listBoxFixed: {
     width: width_proportion,

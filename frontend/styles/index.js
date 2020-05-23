@@ -13,6 +13,20 @@ const uStyles = StyleSheet.create({
     
         elevation: 1,
       },
+      centerContent: {
+        marginTop: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      horizontalStack: {
+        marginTop: 32,
+        flexDirection: 'row',
+      },
+      horizontalStackLeftAlign: {
+        flexDirection: 'row',
+        paddingHorizontal: 24,
+        marginTop: 32,
+      },    
 });
 
 export default uStyles;
