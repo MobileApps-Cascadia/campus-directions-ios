@@ -13,8 +13,7 @@ import {
 } from 'react-native';
 
 import Colors from '../styles/Colors';
-import { Header } from './Header';
-// import { Header } from 'react-native/Libraries/NewAppScreen';
+import Header from './Header';
 
 import config from '../config';
 import { getDirections } from '../libs/directionsAPILib';
