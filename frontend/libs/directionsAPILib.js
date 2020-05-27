@@ -13,14 +13,6 @@ export async function getDirections(start, end) {
     console.log(url);
     let json = await response.json();
 
-    var steps = json.routes[0].legs[0].steps;
-
-    var tripInstructions = [];
-
-    console.log(json);
-    console.log("");
-    console.log(steps);
-
     return json;
   } catch (error) {
     console.error(error);

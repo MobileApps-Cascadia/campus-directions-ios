@@ -37,6 +37,7 @@ export default function HomeScreen({ route, navigation }) {
   const [selectedRoom, setSelectedRoom] = useState([]);
 
   const [location, setLocation] = useState([]);
+  const [steps, setSteps] = useState([]);
 
   useEffect(() => {
     getBuildingList();
@@ -120,6 +121,21 @@ export default function HomeScreen({ route, navigation }) {
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000, distanceFilter: 50, forceRequestLocation: true }
     );
+  };
+
+  getSteps = async (location) => {
+
+    if(location.length == 0) { getLocation(); }
+
+    try {
+      console.log('Fetching steps...');
+      const directions = await getDirections([location.coords.longitude,location.coords.latitude],[selectedBuilding.longitude,selectedBuilding.latitude]);
+      setSteps(directions.routes[0].legs[0].steps);
+      console.log('Successfully gathered steps');
+    } catch(error) {
+      console.log(error.message);
+    }
+
   };
 
   return (
@@ -221,7 +237,7 @@ export default function HomeScreen({ route, navigation }) {
             <Text> OR </Text>
             <Button
               title="Use Location"
-              onPress={() => (selectedBuilding == '' ? createAlert("Please choose a building.") : getDirections([-122.192706,47.759052],[-122.191854,47.761149]))}
+              onPress={() => (selectedBuilding == '' ? createAlert("Please choose a building.") : (steps.length == 0 ? getSteps(location) : console.log(steps)))}
             />
           </View>
 

@@ -14,6 +14,7 @@ import Colors from "./Colors";
 import MapScreen from "./MapScreen";
 import StepsScreen from "./StepsScreen";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import uStyles from '../styles';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -22,11 +23,12 @@ export default function DirectionsScreen({ route, navigation }) {
     <>
       <SafeAreaView>
         <View style={styles.body}>
-          <View style={styles.sectionContainer}>
+          <View style={[styles.sectionContainer, uStyles.centerContent]}>
             <Text style={styles.sectionTitle}>START POINT</Text>
-            <View style={styles.sectionContainer}>
+            <View style={uStyles.horizontalStack}></View>
               <Text style={styles.sectionTitle}>END POINT</Text>
-            </View>
+              <View style={uStyles.horizontalStack}></View>
+
           </View>
           <View styles={styles.sectionContainer}>
           </View>
