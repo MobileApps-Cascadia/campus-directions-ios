@@ -14,6 +14,7 @@ import {
 
 import Colors from '../styles/Colors';
 import { Header } from './Header';
+// import { Header } from 'react-native/Libraries/NewAppScreen';
 
 import config from '../config';
 import { getDirections } from '../libs/directionsAPILib';
