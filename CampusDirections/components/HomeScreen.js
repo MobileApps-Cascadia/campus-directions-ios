@@ -12,13 +12,8 @@ import {
   Alert
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Colors from '../styles/Colors';
+import { Header } from './Header';
 
 import config from '../config';
 import { getDirections } from '../libs/directionsAPILib';

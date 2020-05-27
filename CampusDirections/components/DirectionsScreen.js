@@ -9,7 +9,7 @@ import {
   StatusBar,
 } from 'react-native';
 
-import Colors from "./Colors";
+import Colors from "../styles/Colors";
 
 import MapScreen from "./MapScreen";
 import StepsScreen from "./StepsScreen";

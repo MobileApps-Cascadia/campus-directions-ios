@@ -9,7 +9,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import Colors from "./Colors";
+import Colors from "../styles/Colors";
 
 export default function MapScreen({ routes, navigation }) {
 

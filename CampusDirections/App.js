@@ -11,7 +11,7 @@ import {
   StatusBar
 } from 'react-native';
 
-import { Colors } from './components/Colors';
+import Colors from './styles/Colors';
 import HomeScreen from "./components/HomeScreen";
 import DirectionsScreen from "./components/DirectionsScreen";
 
