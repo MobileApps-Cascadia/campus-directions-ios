@@ -11,13 +11,7 @@ import {
   StatusBar
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { Colors } from './components/Colors';
 import HomeScreen from "./components/HomeScreen";
 import DirectionsScreen from "./components/DirectionsScreen";
 
