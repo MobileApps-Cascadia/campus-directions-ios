@@ -8,15 +8,19 @@ import {
   Text,
   StatusBar,
   ListItem,
+  Linking,
+  Platform,
+  ToastAndroid,
+  PermissionsAndroid,
+  Switch,
+  Alert,
   ActivityIndicator,
-  Alert
 } from 'react-native';
 
 import Colors from '../styles/Colors';
 import Header from './Header';
 
 import config from '../config';
-import { getDirections } from '../libs/directionsAPILib';
 import Geolocation from 'react-native-geolocation-service';
 import uStyles from '../styles/index';
 
@@ -32,11 +36,12 @@ export default function HomeScreen({ route, navigation }) {
   const [selectedRoom, setSelectedRoom] = useState([]);
 
   const [location, setLocation] = useState([]);
+  const [destination, setDestination] = useState([]);
   const [steps, setSteps] = useState([]);
 
   useEffect(() => {
     getBuildingList();
-  }, [buildings]);
+  }, [buildings,location]);
 
   async function getBuildingList() {
     try {
@@ -70,7 +75,7 @@ export default function HomeScreen({ route, navigation }) {
 
   hasLocationPermission = async () => {
     if (Platform.OS === 'ios' ||
-        (Platform.OS === 'android' && Platform.Version < 23)) {
+      (Platform.OS === 'android' && Platform.Version < 23)) {
       return true;
     }
 
@@ -98,15 +103,23 @@ export default function HomeScreen({ route, navigation }) {
   getLocation = async () => {
     const hasLocationPermission = await this.hasLocationPermission();
 
+    console.log("hasLocationPermission = " + hasLocationPermission);
+
     if (!hasLocationPermission) return;
 
     setLoading(true);
 
     Geolocation.getCurrentPosition(
       (position) => {
+
         setLocation(position);
         setLoading(false);
-        console.log(position);
+
+        navigation.navigate('Directions', {
+          destination: destination,
+          location: position,
+        });
+
       },
       (error) => {
         setLocation(error);
@@ -131,7 +144,7 @@ export default function HomeScreen({ route, navigation }) {
             <Text style={styles.footer}>Engine: Hermes</Text>
           </View>
         )}
-        
+
         <View style={styles.body}>
           {/* Step 1 - Choose the Building */}
           <View style={uStyles.horizontalStackLeftAlign}>
@@ -159,10 +172,11 @@ export default function HomeScreen({ route, navigation }) {
                       onPress={() => {
                         setSelectedBuilding(building);
                         setRooms(buildings[index].rooms);
+                        setDestination(building);
                       }}>
                       {building.buildingName}
-                      <Text style={(selectedBuilding.buildingName == building.buildingName ? 
-                        styles.checkMarkShow : 
+                      <Text style={(selectedBuilding.buildingName == building.buildingName ?
+                        styles.checkMarkShow :
                         styles.checkMarkHide)}
                       >  &#10003;</Text>
                     </Text>
@@ -204,9 +218,9 @@ export default function HomeScreen({ route, navigation }) {
               }
             </View>
           </View>
-          
+
           <View style={uStyles.horizontalStack}></View>
-          
+
           {/* Step 3 - Choose the location gathering method */}
           <View style={[uStyles.horizontalStack, uStyles.centerContent]}>
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
@@ -216,8 +230,9 @@ export default function HomeScreen({ route, navigation }) {
             />
             <Text> OR </Text>
             <Button
+              disabled={isLoading}
               title="Use My Location"
-              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : (steps.length == 0 ? getSteps(location) : console.log(steps)))}
+              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : (steps.length == 0 ? getLocation() : console.log(steps)))}
             />
           </View>
 
