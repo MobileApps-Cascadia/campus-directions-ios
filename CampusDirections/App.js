@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
@@ -19,6 +20,10 @@ const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
   
+  componentDidMount = () => {
+    SplashScreen.hide()
+  };
+
   return (
     <>
     <NavigationContainer>

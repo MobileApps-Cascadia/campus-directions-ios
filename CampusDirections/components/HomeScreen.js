@@ -55,7 +55,7 @@ export default function HomeScreen({ route, navigation }) {
 
   const createAlert = (message) => {
     Alert.alert(
-      "Error",
+      "Alert!",
       message,
       [
         {
@@ -118,20 +118,6 @@ export default function HomeScreen({ route, navigation }) {
     );
   };
 
-  getSteps = async (location) => {
-
-    if(location.length == 0) { getLocation(); }
-
-    try {
-      console.log('Fetching steps...');
-      const directions = await getDirections([location.coords.longitude,location.coords.latitude],[selectedBuilding.longitude,selectedBuilding.latitude]);
-      setSteps(directions.routes[0].legs[0].steps);
-      console.log('Successfully gathered steps');
-    } catch(error) {
-      console.log(error.message);
-    }
-
-  };
 
   return (
     <>
@@ -206,7 +192,6 @@ export default function HomeScreen({ route, navigation }) {
                 rooms.map((room, index) => (
                   <Text
                     key={index}
-                    // title={list.buildingName}
                     style={styles.listBoxItem}
                     onPress={() => {
                       setSelectedRoom(room);
@@ -227,12 +212,12 @@ export default function HomeScreen({ route, navigation }) {
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
             <Button
               title="Scan QR"
-              onPress={() => (selectedBuilding == '' ? createAlert() : navigation.navigate('Directions'))}
+              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : navigation.navigate('Directions'))}
             />
             <Text> OR </Text>
             <Button
-              title="Use Location"
-              onPress={() => (selectedBuilding == '' ? createAlert("Please choose a building.") : (steps.length == 0 ? getSteps(location) : console.log(steps)))}
+              title="Use My Location"
+              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : (steps.length == 0 ? getSteps(location) : console.log(steps)))}
             />
           </View>
 

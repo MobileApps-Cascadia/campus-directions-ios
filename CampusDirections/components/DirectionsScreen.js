@@ -19,6 +19,23 @@ import uStyles from '../styles';
 const Tab = createMaterialTopTabNavigator();
 
 export default function DirectionsScreen({ route, navigation }) {
+
+  getSteps = async (location) => {
+
+    if(location.length == 0) { getLocation(); }
+
+    try {
+      console.log('Fetching steps...');
+      const directions = await getDirections([location.coords.longitude,location.coords.latitude],[selectedBuilding.longitude,selectedBuilding.latitude]);
+      setSteps(directions.routes[0].legs[0].steps);
+      console.log('Successfully gathered steps');
+    } catch(error) {
+      console.log(error.message);
+    }
+
+  };
+
+  
   return (
     <>
       <SafeAreaView>
