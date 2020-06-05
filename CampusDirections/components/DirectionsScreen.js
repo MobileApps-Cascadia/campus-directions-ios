@@ -15,6 +15,7 @@ import Colors from "../styles/Colors";
 import MapScreen from "./MapScreen";
 import StepsScreen from "./StepsScreen";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { getDirections } from '../libs/directionsAPILib';
 import uStyles from '../styles';
 
 const Tab = createMaterialTopTabNavigator();
@@ -24,28 +25,31 @@ export default function DirectionsScreen({ route, navigation }) {
 
   const [destination, setDestination] = useState(route.params.destination);
   const [location, setLocation] = useState(route.params.location);
+  const [steps, setSteps] = useState([]);
 
   useEffect(() => {
-    console.log("DESTINATION:");
-    console.log(destination);
-    console.log("USER LOCATION:");
-    console.log(location);
+    // console.log("DESTINATION:");
+    // console.log(destination);
+    // console.log("USER LOCATION:");
+    // console.log(location);
+    getSteps();
 
   }, [destination, location]);
 
-  getSteps = async (location) => {
-
-    if (location.length == 0) { getLocation(); }
-
+  getSteps = async () => {
     try {
       console.log('Fetching steps...');
-      const directions = await getDirections([location.coords.longitude, location.coords.latitude], [selectedBuilding.longitude, selectedBuilding.latitude]);
-      setSteps(directions.routes[0].legs[0].steps);
-      console.log('Successfully gathered steps');
+      console.log(location.coords.longitude);
+      console.log(location.coords.latitude);
+      console.log(destination.lng);
+      console.log(destination.lat);
+      const directions = await getDirections([location.coords.longitude, location.coords.latitude],[destination.lng, destination.lat]);
+      console.log(directions);
+      // setSteps(directions.routes[0].legs[0].steps);
+      console.log('Successfully gathered steps..');
     } catch (error) {
       console.log(error.message);
     }
-
   };
 
 
@@ -116,9 +120,9 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
   },
   sectionDescription: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '400',
-    color: Colors.dark,
+    color: '#666',
     marginHorizontal: 8,
     marginTop: 12,
   },
