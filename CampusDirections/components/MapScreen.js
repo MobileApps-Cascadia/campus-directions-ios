@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,7 +11,11 @@ import {
 } from 'react-native';
 import Colors from "../styles/Colors";
 
-export default function MapScreen({ routes, navigation }) {
+export default function MapScreen({route, navigation }) {
+
+  useEffect(() => {
+    console.log('switch to steps tab');
+  },[]);
 
   return (
     <>

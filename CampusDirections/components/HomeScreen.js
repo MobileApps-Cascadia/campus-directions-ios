@@ -27,7 +27,7 @@ import uStyles from '../styles/index';
 const width_proportion = '90%';
 const width_proportion_listbox_header = '101%';
 
-export default function HomeScreen({ route, navigation }) {
+export default function HomeScreen({route, navigation }) {
 
   const [isLoading, setLoading] = useState(true);
   const [buildings, setBuildings] = useState([]);

@@ -21,7 +21,7 @@ import uStyles from '../styles';
 const Tab = createMaterialTopTabNavigator();
 const width_proportion = '80%';
 
-export default function DirectionsScreen({ route, navigation }) {
+export default function DirectionsScreen({route, navigation }) {
 
   const [destination, setDestination] = useState(route.params.destination);
   const [location, setLocation] = useState(route.params.location);
@@ -30,6 +30,9 @@ export default function DirectionsScreen({ route, navigation }) {
   useEffect(() => {
     getSteps();
 
+    navigation.navigate('Steps & More', {
+      steps: steps
+    });
   }, [destination, location]);
 
   getSteps = async () => {
@@ -39,7 +42,7 @@ export default function DirectionsScreen({ route, navigation }) {
       setSteps(directions.routes[0].legs[0].steps);
       console.log('Successfully gathered steps..');
       steps.map((step, index) => {
-        console.log('Step ' + index + ':\nInstruction: ' + step.maneuver.instruction);
+        console.log('Step ' + index + '\nInstruction: ' + step.maneuver.instruction);
       });
     } catch (error) {
       console.log(error.message);
