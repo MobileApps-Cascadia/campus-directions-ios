@@ -153,7 +153,7 @@ export default function HomeScreen({ route, navigation }) {
           </View>
 
           <View style={uStyles.centerContent}>
-            <View style={[styles.listBoxFixed, uStyles.dropShadow]}>
+            <View style={[uStyles.listBoxFixed200, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
                   {
@@ -194,7 +194,7 @@ export default function HomeScreen({ route, navigation }) {
             <Text style={[styles.sectionTitle, uStyles.dropShadow]}>  Select a room (optional)</Text>
           </View>
           <View style={uStyles.centerContent}>
-            <View style={[styles.listBoxFlexible, uStyles.dropShadow]}>
+            <View style={[uStyles.listBoxFixed400, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
                   {
@@ -202,20 +202,22 @@ export default function HomeScreen({ route, navigation }) {
                   }
                 </Text>
               </View>
-              {
-                rooms.map((room, index) => (
-                  <Text
-                    key={index}
-                    style={styles.listBoxItem}
-                    onPress={() => {
-                      setSelectedRoom(room);
-                    }}>
+              <ScrollView>
+                {
+                  rooms.map((room, index) => (
+                    <Text
+                      key={index}
+                      style={styles.listBoxItem}
+                      onPress={() => {
+                        setSelectedRoom(room);
+                      }}>
 
-                    {room.roomName}
-                    <Text style={(selectedRoom.roomName == room.roomName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
-                  </Text>
-                ))
-              }
+                      {room.roomName}
+                      <Text style={(selectedRoom.roomName == room.roomName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
+                    </Text>
+                  ))
+                }
+              </ScrollView>
             </View>
           </View>
 
@@ -296,30 +298,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
-  },
-  listBoxFixed: {
-    width: width_proportion,
-    height: 200,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderWidth: 1,
-    borderColor: '#EEE',
-    backgroundColor: '#EEE',
-    color: '#fff',
-
-  },
-  listBoxFlexible: {
-    width: width_proportion,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderWidth: 1,
-    borderColor: '#EEE',
-    backgroundColor: '#EEE',
-    color: '#fff',
   },
   listBoxHeaderText: {
     width: width_proportion_listbox_header,

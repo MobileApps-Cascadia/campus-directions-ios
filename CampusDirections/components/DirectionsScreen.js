@@ -44,7 +44,7 @@ export default function DirectionsScreen({ route, navigation }) {
       console.log(destination.lng);
       console.log(destination.lat);
       const directions = await getDirections([location.coords.longitude, location.coords.latitude],[destination.lng, destination.lat]);
-      console.log(directions);
+      console.log(directions.routes.duration);
       // setSteps(directions.routes[0].legs[0].steps);
       console.log('Successfully gathered steps..');
     } catch (error) {
