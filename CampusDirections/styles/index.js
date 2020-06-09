@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+const width_proportion = '90%';
 
 const uStyles = StyleSheet.create({
   dropShadow: {

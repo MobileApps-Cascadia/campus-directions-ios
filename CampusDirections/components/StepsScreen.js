@@ -11,7 +11,7 @@ import {
 
 import Colors from "../styles/Colors";
 
-export default function StepsScreen({ routes, navigation }) {
+export default function StepsScreen({ route, navigation }) {
 
   return (
     <>

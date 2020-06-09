@@ -28,10 +28,6 @@ export default function DirectionsScreen({ route, navigation }) {
   const [steps, setSteps] = useState([]);
 
   useEffect(() => {
-    // console.log("DESTINATION:");
-    // console.log(destination);
-    // console.log("USER LOCATION:");
-    // console.log(location);
     getSteps();
 
   }, [destination, location]);
@@ -39,14 +35,12 @@ export default function DirectionsScreen({ route, navigation }) {
   getSteps = async () => {
     try {
       console.log('Fetching steps...');
-      console.log(location.coords.longitude);
-      console.log(location.coords.latitude);
-      console.log(destination.lng);
-      console.log(destination.lat);
       const directions = await getDirections([location.coords.longitude, location.coords.latitude],[destination.lng, destination.lat]);
-      console.log(directions.routes.duration);
-      // setSteps(directions.routes[0].legs[0].steps);
+      setSteps(directions.routes[0].legs[0].steps);
       console.log('Successfully gathered steps..');
+      steps.map((step, index) => {
+        console.log('Step ' + index + ':\nInstruction: ' + step.maneuver.instruction);
+      });
     } catch (error) {
       console.log(error.message);
     }
