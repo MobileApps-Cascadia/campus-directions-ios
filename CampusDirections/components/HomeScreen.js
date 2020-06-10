@@ -8,22 +8,26 @@ import {
   Text,
   StatusBar,
   ListItem,
+  Linking,
+  Platform,
+  ToastAndroid,
+  PermissionsAndroid,
+  Switch,
+  Alert,
   ActivityIndicator,
-  Alert
 } from 'react-native';
 
 import Colors from '../styles/Colors';
 import Header from './Header';
 
 import config from '../config';
-import { getDirections } from '../libs/directionsAPILib';
 import Geolocation from 'react-native-geolocation-service';
 import uStyles from '../styles/index';
 
 const width_proportion = '90%';
 const width_proportion_listbox_header = '101%';
 
-export default function HomeScreen({ route, navigation }) {
+export default function HomeScreen({route, navigation }) {
 
   const [isLoading, setLoading] = useState(true);
   const [buildings, setBuildings] = useState([]);
@@ -32,11 +36,12 @@ export default function HomeScreen({ route, navigation }) {
   const [selectedRoom, setSelectedRoom] = useState([]);
 
   const [location, setLocation] = useState([]);
+  const [destination, setDestination] = useState([]);
   const [steps, setSteps] = useState([]);
 
   useEffect(() => {
     getBuildingList();
-  }, [buildings]);
+  }, [buildings,location]);
 
   async function getBuildingList() {
     try {
@@ -55,7 +60,7 @@ export default function HomeScreen({ route, navigation }) {
 
   const createAlert = (message) => {
     Alert.alert(
-      "Error",
+      "Alert!",
       message,
       [
         {
@@ -70,7 +75,7 @@ export default function HomeScreen({ route, navigation }) {
 
   hasLocationPermission = async () => {
     if (Platform.OS === 'ios' ||
-        (Platform.OS === 'android' && Platform.Version < 23)) {
+      (Platform.OS === 'android' && Platform.Version < 23)) {
       return true;
     }
 
@@ -98,15 +103,23 @@ export default function HomeScreen({ route, navigation }) {
   getLocation = async () => {
     const hasLocationPermission = await this.hasLocationPermission();
 
+    console.log("hasLocationPermission = " + hasLocationPermission);
+
     if (!hasLocationPermission) return;
 
     setLoading(true);
 
     Geolocation.getCurrentPosition(
       (position) => {
+
         setLocation(position);
         setLoading(false);
-        console.log(position);
+
+        navigation.navigate('Directions', {
+          destination: destination,
+          location: position,
+        });
+
       },
       (error) => {
         setLocation(error);
@@ -118,20 +131,6 @@ export default function HomeScreen({ route, navigation }) {
     );
   };
 
-  getSteps = async (location) => {
-
-    if(location.length == 0) { getLocation(); }
-
-    try {
-      console.log('Fetching steps...');
-      const directions = await getDirections([location.coords.longitude,location.coords.latitude],[selectedBuilding.longitude,selectedBuilding.latitude]);
-      setSteps(directions.routes[0].legs[0].steps);
-      console.log('Successfully gathered steps');
-    } catch(error) {
-      console.log(error.message);
-    }
-
-  };
 
   return (
     <>
@@ -145,7 +144,7 @@ export default function HomeScreen({ route, navigation }) {
             <Text style={styles.footer}>Engine: Hermes</Text>
           </View>
         )}
-        
+
         <View style={styles.body}>
           {/* Step 1 - Choose the Building */}
           <View style={uStyles.horizontalStackLeftAlign}>
@@ -154,7 +153,7 @@ export default function HomeScreen({ route, navigation }) {
           </View>
 
           <View style={uStyles.centerContent}>
-            <View style={[styles.listBoxFixed, uStyles.dropShadow]}>
+            <View style={[uStyles.listBoxFixed200, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
                   {
@@ -173,10 +172,11 @@ export default function HomeScreen({ route, navigation }) {
                       onPress={() => {
                         setSelectedBuilding(building);
                         setRooms(buildings[index].rooms);
+                        setDestination(building);
                       }}>
                       {building.buildingName}
-                      <Text style={(selectedBuilding.buildingName == building.buildingName ? 
-                        styles.checkMarkShow : 
+                      <Text style={(selectedBuilding.buildingName == building.buildingName ?
+                        styles.checkMarkShow :
                         styles.checkMarkHide)}
                       >  &#10003;</Text>
                     </Text>
@@ -194,7 +194,7 @@ export default function HomeScreen({ route, navigation }) {
             <Text style={[styles.sectionTitle, uStyles.dropShadow]}>  Select a room (optional)</Text>
           </View>
           <View style={uStyles.centerContent}>
-            <View style={[styles.listBoxFlexible, uStyles.dropShadow]}>
+            <View style={[uStyles.listBoxFixed400, uStyles.dropShadow]}>
               <View style={styles.listBoxHeader}>
                 <Text style={styles.listBoxHeaderText}>
                   {
@@ -202,37 +202,39 @@ export default function HomeScreen({ route, navigation }) {
                   }
                 </Text>
               </View>
-              {
-                rooms.map((room, index) => (
-                  <Text
-                    key={index}
-                    // title={list.buildingName}
-                    style={styles.listBoxItem}
-                    onPress={() => {
-                      setSelectedRoom(room);
-                    }}>
+              <ScrollView>
+                {
+                  rooms.map((room, index) => (
+                    <Text
+                      key={index}
+                      style={styles.listBoxItem}
+                      onPress={() => {
+                        setSelectedRoom(room);
+                      }}>
 
-                    {room.roomName}
-                    <Text style={(selectedRoom.roomName == room.roomName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
-                  </Text>
-                ))
-              }
+                      {room.roomName}
+                      <Text style={(selectedRoom.roomName == room.roomName ? styles.checkMarkShow : styles.checkMarkHide)}>  &#10003;</Text>
+                    </Text>
+                  ))
+                }
+              </ScrollView>
             </View>
           </View>
-          
+
           <View style={uStyles.horizontalStack}></View>
-          
+
           {/* Step 3 - Choose the location gathering method */}
           <View style={[uStyles.horizontalStack, uStyles.centerContent]}>
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
             <Button
               title="Scan QR"
-              onPress={() => (selectedBuilding == '' ? createAlert() : navigation.navigate('Directions'))}
+              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : navigation.navigate('Directions'))}
             />
             <Text> OR </Text>
             <Button
-              title="Use Location"
-              onPress={() => (selectedBuilding == '' ? createAlert("Please choose a building.") : (steps.length == 0 ? getSteps(location) : console.log(steps)))}
+              disabled={isLoading}
+              title="Use My Location"
+              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : (steps.length == 0 ? getLocation() : console.log(steps)))}
             />
           </View>
 
@@ -296,30 +298,6 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
-  },
-  listBoxFixed: {
-    width: width_proportion,
-    height: 200,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderWidth: 1,
-    borderColor: '#EEE',
-    backgroundColor: '#EEE',
-    color: '#fff',
-
-  },
-  listBoxFlexible: {
-    width: width_proportion,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderWidth: 1,
-    borderColor: '#EEE',
-    backgroundColor: '#EEE',
-    color: '#fff',
   },
   listBoxHeaderText: {
     width: width_proportion_listbox_header,
