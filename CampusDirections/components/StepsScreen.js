@@ -49,11 +49,11 @@ export default function StepsScreen({ route, navigation }) {
         <View style={styles.body}>
           <Text style={styles.sectionTitle}>{(directions.duration/60).toFixed(0)} min ({(directions.distance * 0.00062137).toFixed(1)}mi)</Text>
           <View style={styles.sectionContainer}>
-            {/* {
+            {
               steps.map((step, index) => (
                 <StepItem key={index} instruction={step.maneuver.instruction} distance={step.distance}/>
               ))
-            } */}
+            }
           </View>
 
         </View>
