@@ -28,6 +28,7 @@ import { callAPI } from '../libs/directionsAPILib';
 const width_proportion = '90%';
 const width_proportion_listbox_header = '101%';
 
+
 export default function HomeScreen({route, navigation }) {
 
   const [isLoading, setLoading] = useState(true);
@@ -141,6 +142,7 @@ export default function HomeScreen({route, navigation }) {
       console.log(error.message);
     }
   };
+
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -249,7 +251,11 @@ export default function HomeScreen({route, navigation }) {
             />
           </View>
 
-          <View style={uStyles.horizontalStack}></View>
+          <View style={[uStyles.horizontalStack, uStyles.centerContent]}>
+            <Button 
+              title={"Reset Form"}
+             />
+          </View>
 
           {/* Footer */}
           <View style={[uStyles.horizontalStack, uStyles.centerContent]}>

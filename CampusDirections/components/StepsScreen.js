@@ -15,34 +15,6 @@ import uStyles from '../styles';
 
 const width_hr = '100%';
 
-function StepItem({instruction, distance, modifier, type}) {
-
-  var path = '';
-  if(modifier) {
-    path = 'arrows/' + modifier;
-  }
-  if (type == 'arrive') {
-    path = 'arrive';
-  }
-  if (type == 'depart') {
-    path = 'marker-50';
-  }
-
-  console.log(path);
-
-  return(
-    <>
-    <View style={uStyles.horizontalStack}>
-      <Image source={require(`../assets/${path}.png`)} style={styles.largeIcon} />
-      <Text style={styles.sectionDescription}>{instruction}</Text>
-    </View>
-    <View style={styles.hStack}>
-      <Text style={styles.sectionDescription}>{(distance * 0.304799).toFixed(1)} ft</Text>
- 
-    </View>
-    </>
-  );
-}
 
 export default function StepsScreen({ route, navigation }) {
 
@@ -60,6 +32,37 @@ export default function StepsScreen({ route, navigation }) {
 
   }, [steps, directions, destination, position]);
 
+  function StepItem({ instruction, distance, modifier, type }) {
+    let icons = {
+      "arrive": require('../assets/arrive.png'),
+      "depart": require('../assets/marker-50.png'),
+      "straight": require('../assets/arrows/straight.png'),
+      "uturn": require('../assets/arrows/u-turn.png'),
+      "right": require('../assets/arrows/right.png'),
+      "slight right": require('../assets/arrows/slight-right.png'),
+      "sharp right": require('../assets/arrows/sharp-right.png'),
+      "left": require('../assets/arrows/left.png'),
+      "slight left": require('../assets/arrows/slight-left.png'),
+      "sharp left": require('../assets/arrows/sharp-left.png')
+    }
+    const icon = (modifier ? (type == 'arrive'? type : modifier) : type);
+    let iconPath = icons[icon];
+
+    return (
+      <>
+              <View style={styles.hr}></View>
+        <View style={uStyles.horizontalStack}>
+          <Image source={iconPath} style={styles.largeIcon} />
+          <Text style={styles.sectionDescription}>{instruction}</Text>
+        </View>
+        <View style={styles.hStack}>
+          <Text style={styles.sectionDescription}>{(distance * 0.304799).toFixed(0)} ft</Text>
+
+        </View>
+      </>
+    );
+  }
+
   return (
     <>
       <ScrollView
@@ -67,17 +70,18 @@ export default function StepsScreen({ route, navigation }) {
         style={styles.scrollView}>
 
         <View style={styles.body}>
-          <Text style={styles.sectionTitle}>{(directions.duration/60).toFixed(0)} min ({(directions.distance * 0.00062137).toFixed(1)}mi)</Text>
+          <Text style={styles.sectionTitle}>{(directions.duration / 60).toFixed(0)} min ({(directions.distance * 0.00062137).toFixed(1)}mi)</Text>
           <View style={styles.sectionContainer}>
             <View style={styles.hStack}>
               <Image source={require('../assets/box-important-50.png')} style={styles.largeIcon} />
               <Text style={styles.caution} >Use Caution &#8212; walking directions may not always reflect real-world conditions.</Text>
             </View>
-            <View style={styles.hr}></View>
-            <Text style={styles.sectionDescription}>Steps</Text>
+            <Text style={styles.sectionSteps}>Steps</Text>
+            {/* <View style={styles.hr}></View> */}
             {
               steps.map((step, index) => (
                 <StepItem key={index} type={step.maneuver.type} instruction={step.maneuver.instruction} distance={step.distance} modifier={step.maneuver.modifier} />
+                
               ))
             }
           </View>
@@ -109,8 +113,15 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     padding: 12,
   },
+  sectionSteps: {
+    marginTop: 10,
+    // marginBottom: 19,
+    fontSize: 16,
+    fontWeight: '400',
+    color: Colors.dark,
+  },
   sectionDescription: {
-    marginTop: 8,
+    // marginTop: 8,
     fontSize: 16,
     fontWeight: '400',
     color: Colors.dark,
@@ -127,12 +138,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   largeIcon: {
-    marginVertical: 8,
+    marginRight: 8,
     width: 20,
-    height:20,
+    height: 20,
   },
   hr: {
-    marginVertical: 12,
+    marginVertical: 10,
     borderBottomColor: Colors.dark,
     borderBottomWidth: 1,
     width: width_hr,
