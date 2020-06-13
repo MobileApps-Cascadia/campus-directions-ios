@@ -23,6 +23,7 @@ import Header from './Header';
 import config from '../config';
 import Geolocation from 'react-native-geolocation-service';
 import uStyles from '../styles/index';
+import { callAPI } from '../libs/directionsAPILib';
 
 const width_proportion = '90%';
 const width_proportion_listbox_header = '101%';
@@ -35,13 +36,14 @@ export default function HomeScreen({route, navigation }) {
   const [selectedBuilding, setSelectedBuilding] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
 
-  const [location, setLocation] = useState([]);
+  const [position, setPosition] = useState([]);
   const [destination, setDestination] = useState([]);
-  const [steps, setSteps] = useState([]);
+  const [directions, setDirections] = useState([]);
 
   useEffect(() => {
     getBuildingList();
-  }, [buildings,location]);
+
+  }, [directions, position, destination]);
 
   async function getBuildingList() {
     try {
@@ -57,6 +59,32 @@ export default function HomeScreen({route, navigation }) {
       console.error(error);
     }
   };
+
+
+  async function getPosition() {
+    const hasLocationPermission = await this.hasLocationPermission();
+    console.log("hasLocationPermission = " + hasLocationPermission);
+
+    setLoading(true);
+
+    if (hasLocationPermission) {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          // console.log(position);
+          setPosition(position);
+          getDirections()
+        },
+        (error) => {
+          setLoading(false);
+          console.log(error);
+          createAlert(error.message);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000, distanceFilter: 50, forceRequestLocation: true }
+      );
+    }
+    setLoading(false);
+  };
+
 
   const createAlert = (message) => {
     Alert.alert(
@@ -100,38 +128,19 @@ export default function HomeScreen({route, navigation }) {
     return false;
   };
 
-  getLocation = async () => {
-    const hasLocationPermission = await this.hasLocationPermission();
+  getDirections = async () => {
+    try {
+      console.log('Fetching steps...');
+      const directions = await callAPI([position.coords.longitude, position.coords.latitude],[destination.lng, destination.lat]);
+      // console.log(directions.routes[0]);
+      setDirections(directions.routes[0]);
 
-    console.log("hasLocationPermission = " + hasLocationPermission);
+      // return directions.routes[0];
 
-    if (!hasLocationPermission) return;
-
-    setLoading(true);
-
-    Geolocation.getCurrentPosition(
-      (position) => {
-
-        setLocation(position);
-        setLoading(false);
-
-        navigation.navigate('Directions', {
-          destination: destination,
-          location: position,
-        });
-
-      },
-      (error) => {
-        setLocation(error);
-        setLoading(false);
-        console.log(error);
-        createAlert(error.message);
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000, distanceFilter: 50, forceRequestLocation: true }
-    );
+    } catch (error) {
+      console.log(error.message);
+    }
   };
-
-
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -148,6 +157,7 @@ export default function HomeScreen({route, navigation }) {
         <View style={styles.body}>
           {/* Step 1 - Choose the Building */}
           <View style={uStyles.horizontalStackLeftAlign}>
+
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>1</Text></View>
             <Text style={[styles.sectionTitle, uStyles.dropShadow]}>  Select a building</Text>
           </View>
@@ -173,6 +183,7 @@ export default function HomeScreen({route, navigation }) {
                         setSelectedBuilding(building);
                         setRooms(buildings[index].rooms);
                         setDestination(building);
+                        getPosition();
                       }}>
                       {building.buildingName}
                       <Text style={(selectedBuilding.buildingName == building.buildingName ?
@@ -234,7 +245,7 @@ export default function HomeScreen({route, navigation }) {
             <Button
               disabled={isLoading}
               title="Use My Location"
-              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : (steps.length == 0 ? getLocation() : console.log(steps)))}
+              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : navigation.navigate('Directions', {position: position, destination: destination, directions: directions}))}
             />
           </View>
 

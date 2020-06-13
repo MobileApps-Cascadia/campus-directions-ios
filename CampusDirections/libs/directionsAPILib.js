@@ -1,7 +1,7 @@
 import config from '../config';
 
 // create a function to make a directions request
-export async function getDirections(start, end) {
+export async function callAPI(start, end) {
   // make a directions request using walking profile
   console.log("start lng: " + start[0]);
   console.log("start lat: " + start[1]);
