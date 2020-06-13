@@ -5,6 +5,7 @@ import {
   ScrollView,
   View,
   Button,
+  Image,
   Text,
   StatusBar,
 } from 'react-native';
@@ -12,14 +13,33 @@ import {
 import Colors from "../styles/Colors";
 import uStyles from '../styles';
 
-function StepItem({instruction, distance}) {
+const width_hr = '100%';
+
+function StepItem({instruction, distance, modifier, type}) {
+
+  var path = '';
+  if(modifier) {
+    path = 'arrows/' + modifier;
+  }
+  if (type == 'arrive') {
+    path = 'arrive';
+  }
+  if (type == 'depart') {
+    path = 'marker-50';
+  }
+
+  console.log(path);
+
   return(
     <>
     <View style={uStyles.horizontalStack}>
-      {/* <Image source={require('../assets/' + modifier + '.png')} style={styles.largeIcon} /> */}
+      <Image source={require(`../assets/${path}.png`)} style={styles.largeIcon} />
       <Text style={styles.sectionDescription}>{instruction}</Text>
     </View>
-    <Text>{(distance * 0.304799).toFixed(1)}</Text>
+    <View style={styles.hStack}>
+      <Text style={styles.sectionDescription}>{(distance * 0.304799).toFixed(1)} ft</Text>
+ 
+    </View>
     </>
   );
 }
@@ -49,9 +69,15 @@ export default function StepsScreen({ route, navigation }) {
         <View style={styles.body}>
           <Text style={styles.sectionTitle}>{(directions.duration/60).toFixed(0)} min ({(directions.distance * 0.00062137).toFixed(1)}mi)</Text>
           <View style={styles.sectionContainer}>
+            <View style={styles.hStack}>
+              <Image source={require('../assets/box-important-50.png')} style={styles.largeIcon} />
+              <Text style={styles.caution} >Use Caution &#8212; walking directions may not always reflect real-world conditions.</Text>
+            </View>
+            <View style={styles.hr}></View>
+            <Text style={styles.sectionDescription}>Steps</Text>
             {
               steps.map((step, index) => (
-                <StepItem key={index} instruction={step.maneuver.instruction} distance={step.distance}/>
+                <StepItem key={index} type={step.maneuver.type} instruction={step.maneuver.instruction} distance={step.distance} modifier={step.maneuver.modifier} />
               ))
             }
           </View>
@@ -80,14 +106,22 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
-    color: Colors.black,
+    color: Colors.primary,
     padding: 12,
   },
   sectionDescription: {
     marginTop: 8,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '400',
     color: Colors.dark,
+  },
+  caution: {
+    marginLeft: 12,
+    marginTop: 7,
+    marginBottom: 10,
+    fontSize: 12,
+    fontWeight: '500',
+    color: Colors.black,
   },
   highlight: {
     fontWeight: '700',
@@ -96,5 +130,14 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     width: 20,
     height:20,
+  },
+  hr: {
+    marginVertical: 12,
+    borderBottomColor: Colors.dark,
+    borderBottomWidth: 1,
+    width: width_hr,
+  },
+  hStack: {
+    flexDirection: 'row',
   },
 });
