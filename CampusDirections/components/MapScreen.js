@@ -14,7 +14,7 @@ import Colors from "../styles/Colors";
 export default function MapScreen({route, navigation }) {
 
   useEffect(() => {
-    console.log('switch to steps tab');
+    console.log('loading map view');
   },[]);
 
   return (

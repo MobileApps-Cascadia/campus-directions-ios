@@ -15,7 +15,6 @@ import Colors from "../styles/Colors";
 import MapScreen from "./MapScreen";
 import StepsScreen from "./StepsScreen";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { getDirections } from '../libs/directionsAPILib';
 import uStyles from '../styles';
 
 const Tab = createMaterialTopTabNavigator();
@@ -24,31 +23,20 @@ const width_proportion = '80%';
 export default function DirectionsScreen({route, navigation }) {
 
   const [destination, setDestination] = useState(route.params.destination);
-  const [location, setLocation] = useState(route.params.location);
-  const [steps, setSteps] = useState([]);
+  const [position, setPosition] = useState(route.params.position);
+  const [directions, setDirections] = useState(route.params.directions);
 
   useEffect(() => {
-    getSteps();
+    // console.log('DESTINATION AGAIN:');
+    // console.log(destination);
 
-    navigation.navigate('Steps & More', {
-      steps: steps
-    });
-  }, [destination, location]);
+    // console.log('POSITION  AGAIN:');
+    // console.log(position);
 
-  getSteps = async () => {
-    try {
-      console.log('Fetching steps...');
-      const directions = await getDirections([location.coords.longitude, location.coords.latitude],[destination.lng, destination.lat]);
-      setSteps(directions.routes[0].legs[0].steps);
-      console.log('Successfully gathered steps..');
-      steps.map((step, index) => {
-        console.log('Step ' + index + '\nInstruction: ' + step.maneuver.instruction);
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+    // console.log('DIRECTIONS AGAIN:');
+    // console.log(directions);
 
+  }, [destination, position, directions]);
 
   return (
     <>
@@ -63,7 +51,7 @@ export default function DirectionsScreen({route, navigation }) {
                 source={require('../assets/circle-50.png')} 
               />
               <View style={styles.textBox}>
-                <Text style={styles.sectionDescription}>{location.coords.longitude.toFixed(5)}, {location.coords.latitude.toFixed(5)}</Text>
+                <Text style={styles.sectionDescription}>{position.coords.longitude.toFixed(5)}, {position.coords.latitude.toFixed(5)}</Text>
               </View>
             </View>
 
@@ -93,8 +81,26 @@ export default function DirectionsScreen({route, navigation }) {
       </SafeAreaView>
       {/* Create the two tabs using React Navigation Materials Top Tabs */}
       <Tab.Navigator>
-        <Tab.Screen name="Steps & More" component={StepsScreen} />
-        <Tab.Screen name="Map View" component={MapScreen} />
+        <Tab.Screen
+          name="StepsView"
+          component={StepsScreen}
+          options={{ tabBarLabel: 'STEPS & MORE' }}
+          initialParams={{ 
+            directions: route.params.directions,
+            position: route.params.position,
+            destination: route.params.destination 
+          }}
+        />
+        <Tab.Screen
+          name="MapView"
+          component={MapScreen}
+          options={{ tabBarLabel: 'MAP VIEW' }}
+          initialParams={{ 
+            directions: route.params.directions,
+            position: route.params.position,
+            destination: route.params.destination 
+          }}
+        />
       </Tab.Navigator>
     </>
   );
