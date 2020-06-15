@@ -3,27 +3,42 @@ import { StyleSheet, Dimensions, View, Text, TouchableOpacity, Linking, Button, 
 import QRCodeScanner from "react-native-qrcode-scanner";
 import { RNCamera } from 'react-native-camera';
 import QRCode from 'react-native-qrcode-svg';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 
 import { callAPI } from '../libs/directionsAPILib';
-import config from '../config';
 
 class QRCodeScannerScreen extends Component {
-
-	state = {
-		qr: "",
-		position: {},
+	constructor(props) {
+		super(props);
+		this.state = {
+			qr: undefined,
+			position: {},
+			destination: props.route.params.destination,
+			directions: props.route.params.directions,
+		};
+		console.log('loaded qr screen');
 	}
 
-	onRead = e => {
+
+	onRead = async (e) => {
 		console.log(e.data);
-		this.setState({qr: e.data});
-		this.getQRCoords(e.data);
 
-		// const mDirections =  this.getDirections([this.state.position.lng, this.state.position.lat],[this.state.destination.lng,this.state.destination.lat]);
-		// console.log(e.data);
+		this.setState({
+			qr: e.data,
+		});
+
+		var mQR = await this.getQRCoords(e.data);
+		console.log(mQR);
+
+		console.log('fetching directions from qr');
+		if (mQR) {
+			const mDirections = await this.getDirections([this.state.position.lng, this.state.position.lat], [this.state.destination.lng, this.state.destination.lat]);
+			if (mDirections) {
+				this.props.navigation.navigate('Directions', { destination: this.state.destination, directions: mDirections, position: this.state.position });
+			}
+		}
 	}
-	
+
 	getQRCoords = async (url) => {
 		try {
 			let response = await fetch(
@@ -33,7 +48,7 @@ class QRCodeScannerScreen extends Component {
 			let json = await response.json();
 			console.log(json);
 			this.setState({
-				position: json
+				position: json,
 			});
 			return json;
 		} catch (error) {
@@ -41,21 +56,24 @@ class QRCodeScannerScreen extends Component {
 		}
 	};
 
-	// getDirections = async () => {
-  //   try {
-  //     console.log('Fetching steps...');
-  //     const directions = await callAPI([this.state.position.coords.longitude, this.state.position.coords.latitude],[this.state.destination.lng, this.state.destination.lat]);
-  //     // console.log(directions.routes[0]);
-  //     setDirections(directions.routes[0]);
-
-  //     // return directions.routes[0];
-
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-	// };
+	getDirections = async () => {
+		try {
+			console.log('Fetching steps...');
+			const directions = await callAPI([this.state.position.lng, this.state.position.lat], [this.state.destination.lng, this.state.destination.lat]);
+			console.log(directions.routes[0]);
+			this.setState({
+				directions: directions.routes[0],
+			});
+			return directions.routes[0];
+		} catch (error) {
+			console.log(error.message);
+		}
+	};
 
 	render() {
+		const { navigation } = this.props;
+		const { route } = this.props;
+
 		return (
 			<>
 				<SafeAreaView>
@@ -66,12 +84,7 @@ class QRCodeScannerScreen extends Component {
 							checkAndroid6Permissions={true}
 							flashMode={RNCamera.Constants.FlashMode.auto}
 
-							bottomContent={
-								<TouchableOpacity style={styles.buttonTouchable}>
-            <Text style={styles.buttonText}>OK. Got it!</Text>
-								</TouchableOpacity>
-							}
-							// cameraStyle={{ height: Dimensions.get("window").height }}
+							cameraStyle={{ height: Dimensions.get("window").height }}
 						/>
 					</View>
 				</SafeAreaView>
@@ -89,23 +102,28 @@ const styles = StyleSheet.create({
 		backgroundColor: "#F5FCFF"
 	},
 	centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
+		flex: 1,
+		fontSize: 18,
+		padding: 32,
 		color: '#777',
-  },
-  textBold: {
-    fontWeight: '500',
-    color: '#000'
-  },
-  buttonText: {
-    fontSize: 21,
-    color: 'rgb(0,122,255)'
-  },
-  buttonTouchable: {
+	},
+	textBold: {
+		fontWeight: '500',
+		color: '#000'
+	},
+	buttonText: {
+		fontSize: 21,
+		color: 'rgb(0,122,255)'
+	},
+	buttonTouchable: {
 		padding: 16,
 		marginTop: 20,
-  },
+	},
 });
 
-export default QRCodeScannerScreen;
+
+export default function showQRCodeScannerScreen({ props }) {
+	const navigation = useNavigation();
+	const route = useRoute();
+	return <QRCodeScannerScreen {...props} route={route} navigation={navigation} />
+}
