@@ -2,7 +2,6 @@ import React, { useState, useEffect, Component } from "react";
 import { StyleSheet, Dimensions, View, Text, TouchableOpacity, Linking, Button, SafeAreaView } from "react-native";
 import QRCodeScanner from "react-native-qrcode-scanner";
 import { RNCamera } from 'react-native-camera';
-import QRCode from 'react-native-qrcode-svg';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
 import { callAPI } from '../libs/directionsAPILib';
@@ -11,7 +10,7 @@ class QRCodeScannerScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			qr: undefined,
+			qrURI: undefined,
 			position: {},
 			destination: props.route.params.destination,
 			directions: props.route.params.directions,
@@ -24,7 +23,7 @@ class QRCodeScannerScreen extends Component {
 		console.log(e.data);
 
 		this.setState({
-			qr: e.data,
+			qrURI: e.data,
 		});
 
 		var mQR = await this.getQRCoords(e.data);
