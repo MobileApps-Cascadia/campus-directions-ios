@@ -79,6 +79,9 @@ target 'CampusDirections' do
 
   # GeoLocation Services
   pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
+  
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera.podspec"
 
   target 'CampusDirectionsTests' do
     inherit! :complete

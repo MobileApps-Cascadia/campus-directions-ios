@@ -34,8 +34,8 @@ export default function StepsScreen({ route, navigation }) {
 
   function StepItem({ instruction, distance, modifier, type }) {
     let icons = {
-      "arrive": require('../assets/arrive.png'),
-      "depart": require('../assets/marker-50.png'),
+      "arrive": require('../assets/marker-50.png'),
+      "depart": require('../assets/walking.png'),
       "straight": require('../assets/arrows/straight.png'),
       "uturn": require('../assets/arrows/u-turn.png'),
       "right": require('../assets/arrows/right.png'),

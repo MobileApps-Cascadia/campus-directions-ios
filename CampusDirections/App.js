@@ -15,6 +15,7 @@ import {
 import Colors from './styles/Colors';
 import HomeScreen from "./components/HomeScreen";
 import DirectionsScreen from "./components/DirectionsScreen";
+import QRCodeScannerScreen from "./components/QRCodeScannerScreen";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,7 @@ const App: () => React$Node = () => {
         {/* Setup the Stack Navigation */}
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Directions" component={DirectionsScreen} />
+        <Stack.Screen name="QR Scanner" component={QRCodeScannerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </>

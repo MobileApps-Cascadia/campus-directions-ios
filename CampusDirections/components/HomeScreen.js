@@ -16,12 +16,12 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
 
 import Colors from '../styles/Colors';
 import Header from './Header';
 
 import config from '../config';
-import Geolocation from 'react-native-geolocation-service';
 import uStyles from '../styles/index';
 import { callAPI } from '../libs/directionsAPILib';
 
@@ -73,7 +73,8 @@ export default function HomeScreen({route, navigation }) {
         (position) => {
           // console.log(position);
           setPosition(position);
-          getDirections()
+          getDirections();
+
         },
         (error) => {
           setLoading(false);
@@ -241,7 +242,7 @@ export default function HomeScreen({route, navigation }) {
             <View style={[styles.numberCircle, uStyles.dropShadow]}><Text style={styles.numberCircleText}>3</Text></View>
             <Button
               title="Scan QR"
-              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : navigation.navigate('Directions'))}
+              onPress={() => (selectedBuilding == '' ? createAlert("You must choose a building before proceeding.") : navigation.navigate('QR Scanner', {position: position, destination: destination, directions: directions}))}
             />
             <Text> OR </Text>
             <Button

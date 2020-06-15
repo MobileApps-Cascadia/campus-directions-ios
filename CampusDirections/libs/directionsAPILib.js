@@ -8,7 +8,7 @@ export async function callAPI(start, end) {
   console.log("end lng: " + end[0]);
   console.log("end lat: " + end[1]);
 
-  var url = 'https://api.mapbox.com/directions/v5/mapbox/walking/' + start[0] + ',' + start[1] + ';-122.226896,47.849682,' + '?steps=true&geometries=geojson&access_token=' + config.mapBox.ACCESS_TOKEN;
+  var url = 'https://api.mapbox.com/directions/v5/mapbox/walking/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + config.mapBox.ACCESS_TOKEN;
 
   console.log(url);
   
