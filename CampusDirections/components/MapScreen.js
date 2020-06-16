@@ -21,7 +21,6 @@ MapboxGL.setAccessToken(config.mapBox.ACCESS_TOKEN);
 const layerStyles = {
   building: {
     fillExtrusionColor: '#aaa',
-
     fillExtrusionHeight: [
       'interpolate',
       ['linear'],
@@ -66,35 +65,35 @@ export default function MapScreen({ route, navigation }) {
 
     return (
       <>
-      <MapboxGL.PointAnnotation
-        id={'1'}
-        coordinate={[destination.lng, destination.lat]}
-        title={destination.buildingName}
-        ref={(ref) => (annotationRef = ref)}>
-        <View style={styles.annotationContainer}>
-          <Image
-            source={require('../assets/marker-50.png')}
-            style={{width: 30, height: 30}}
-          />
-          
-        </View>
-        <MapboxGL.Callout title={destination.buildingName} />
-      </MapboxGL.PointAnnotation>
+        <MapboxGL.PointAnnotation
+          id={'1'}
+          coordinate={[destination.lng, destination.lat]}
+          title={destination.buildingName}
+          ref={(ref) => (annotationRef = ref)}>
+          <View style={styles.annotationContainer}>
+            <Image
+              source={require('../assets/marker-50.png')}
+              style={{ width: 30, height: 30 }}
+            />
 
-      <MapboxGL.PointAnnotation
-        id={'2'}
-        coordinate={[position.lng, position.lat]}
-        title={destination.buildingName}
-        ref={(ref) => (annotationRef = ref)}>
-        <View style={styles.annotationContainer}>
-          <Image
-            source={require('../assets/walking.png')}
-            style={{ width: 30, height: 30 }}
-          />
+          </View>
+          <MapboxGL.Callout title={destination.buildingName} />
+        </MapboxGL.PointAnnotation>
 
-        </View>
-        <MapboxGL.Callout title={destination.buildingName} />
-      </MapboxGL.PointAnnotation>
+        <MapboxGL.PointAnnotation
+          id={'2'}
+          coordinate={[position.lng, position.lat]}
+          title={destination.buildingName}
+          ref={(ref) => (annotationRef = ref)}>
+          <View style={styles.annotationContainer}>
+            <Image
+              source={require('../assets/walking.png')}
+              style={{ width: 30, height: 30 }}
+            />
+
+          </View>
+          <MapboxGL.Callout title={destination.buildingName} />
+        </MapboxGL.PointAnnotation>
       </>
     )
   };
@@ -105,10 +104,10 @@ export default function MapScreen({ route, navigation }) {
         <View style={styles.container}>
           <MapboxGL.MapView
             zoomLevel={12}
-            centerCoordinate={[-122.191567, 47.760413]}
+            centerCoordinate={[position.lng, position.lat]}
             style={styles.map}>
 
-            <MapboxGL.Camera 
+            <MapboxGL.Camera
               followZoomLevel={12}
               animationMode={'flyTo'}
               centerCoordinate={[destination.lng, destination.lat]} />
@@ -118,13 +117,13 @@ export default function MapScreen({ route, navigation }) {
             </MapboxGL.ShapeSource>
 
             <MapboxGL.VectorSource>
-            <MapboxGL.FillExtrusionLayer
-              id="building3d"
-              sourceLayerID="building"
-              style={layerStyles.building}
-            />
-          </MapboxGL.VectorSource>
-          {renderAnnotations()}
+              <MapboxGL.FillExtrusionLayer
+                id="building3d"
+                sourceLayerID="building"
+                style={layerStyles.building}
+              />
+            </MapboxGL.VectorSource>
+            {renderAnnotations()}
 
           </MapboxGL.MapView>
         </View>
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: "tomato",
   },
   map: {
-    flex: 1 
+    flex: 1
   },
   annotationContainer: {
     width: 30,
