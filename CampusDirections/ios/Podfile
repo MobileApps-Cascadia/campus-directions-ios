@@ -80,8 +80,12 @@ target 'CampusDirections' do
   # GeoLocation Services
   pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
   
+  # Camera Permission
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera.podspec"
+
+  # Mapbox
+  pod 'react-native-mapbox-gl', :path => '../node_modules/@react-native-mapbox-gl/maps'
 
   target 'CampusDirectionsTests' do
     inherit! :complete
@@ -89,6 +93,8 @@ target 'CampusDirections' do
   end
 
   use_native_modules!
+
+  use_frameworks!
 
   # Enables Flipper.
   #
