@@ -94,6 +94,8 @@ target 'CampusDirections' do
 
   use_native_modules!
 
+  use_frameworks!
+
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
